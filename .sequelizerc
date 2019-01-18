@@ -1,0 +1,10 @@
+/**
+ * The Coding Boot Camp at UNC Charlotte.
+ * (c) 2019 Richard Cyrus, Teddy Johnson, Sara Minerva, Yobany Perez
+ */
+
+const path = require('path');
+
+module.exports = {
+    'config': path.resolve('config', 'config.js')
+}
