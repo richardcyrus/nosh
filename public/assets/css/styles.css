@@ -30,7 +30,7 @@ html {
 .startBtn {
     background-color: rgb(255, 77, 0);
     border: 0 none;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Muli', sans-serif;
     margin: auto;
 }
 .startBtn:hover {
@@ -41,29 +41,29 @@ html {
     margin: auto;
 }
 .aboutNosh {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Muli', sans-serif;
     color: white;
     text-align: center;
     background: linear-gradient(to top left, rgb(255, 77, 0), rgb(255, 144, 21));
 }
 
 /* results page navbar */
-.resultsBody {
+.resultsNav {
     background: linear-gradient(to top left, rgb(255, 77, 0), rgb(255, 144, 21));
+}
+.resultsBody {
+    background: white;
     background-repeat: no-repeat;
     height: 100% !important;
 }
 .resultSpan {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
+    margin-top: 20px;
+    text-align: center;
     background: none !important;
-    color: white;
+    font-family: 'Muli', sans-serif;
+    color: black;
 }
-.resultName {
-    display: flex;
-    justify-content: flex-start !important;
-}
+/* JUST IN CASE
 .phoneDirBtn {
     display: flex;
     justify-content: flex-end;
@@ -74,7 +74,7 @@ html {
 .phoneDirBtn:hover {
     background-color: orangered;
     color: white; 
-}
+} */
 
 /* results page carousel */
 .slide {
@@ -83,7 +83,24 @@ html {
     height: 300px !important;
   }
   .carousel-inner{
+    margin-top: 20px;
     height: 300px !important;
     border-radius: 55px 55px 55px 55px;
+    box-shadow: 10px 10px 8px rgba(0, 0, 0, 0.3);
     overflow: hidden;
   }
+/* stars */
+.starsDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.checked {
+    color: orange;
+  }
+/* restaurant details */
+.restaurantDetails {
+    background: none !important
+}
