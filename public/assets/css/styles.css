@@ -61,7 +61,7 @@ html {
     text-align: center;
     background: none !important;
     font-family: 'Muli', sans-serif;
-    color: black;
+    color: rgb(255, 77, 0);
 }
 /* JUST IN CASE
 .phoneDirBtn {
@@ -98,9 +98,14 @@ html {
     margin-bottom: 20px;
 }
 .checked {
-    color: orange;
+    color: rgb(255, 144, 21);
   }
-/* restaurant details */
-.restaurantDetails {
-    background: none !important
+/* restaurant details table */
+.tableTitle {
+    color: rgb(255, 77, 0);
+    font-family: 'Muli', sans-serif;
+}
+.detailsTable {
+    font-family: 'Muli', sans-serif;
+    border-radius: 0px 0px 20px 20px;
 }
