@@ -13,7 +13,7 @@
  * Module dependencies.
  */
 const app = require('../app');
-const debug = require('debug')('project2:server');
+const debug = require('debug')('nosh:server');
 const http = require('http');
 const models = require('../models');
 
