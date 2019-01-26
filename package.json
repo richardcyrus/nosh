@@ -5,7 +5,9 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "./node_modules/.bin/eslint '**/*.js' --quiet",
+    "fix": "./node_modules/.bin/eslint --fix .",
+    "test": "npm run lint"
   },
   "repository": {
     "type": "git",
