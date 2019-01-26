@@ -20,7 +20,7 @@ const app = express();
 // view engine setup
 const hbs = exphbs.create({
     defaultLayout: 'main',
-    extname: '.hbs'
+    extname: '.hbs',
 });
 app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
@@ -30,12 +30,14 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(sassMiddleware({
-    src: path.join(__dirname, 'public'),
-    dest: path.join(__dirname, 'public'),
-    indentedSyntax: false,
-    sourceMap: true
-}));
+app.use(
+    sassMiddleware({
+        src: path.join(__dirname, 'public'),
+        dest: path.join(__dirname, 'public'),
+        indentedSyntax: false,
+        sourceMap: true,
+    })
+);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
