@@ -1,0 +1,89 @@
+
+/* css for all pages */
+html {
+    height: 100%;
+}
+/* css for main page */
+.homeDiv {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+.homeBody {
+    background-image: url("../images/main_page_bg.jpg") !important;
+    background-size: cover;
+    height: 100%;
+}
+.mainTitle {
+    background-image: url("../images/main_page_bg.jpg") !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+.noshSvg {
+    width: 50%;
+    height: auto;
+    margin: auto;
+}
+.startBtn {
+    background-color: rgb(255, 77, 0);
+    border: 0 none;
+    font-family: 'Poppins', sans-serif;
+    margin: auto;
+}
+.startBtn:hover {
+    background-color: rgb(0, 157, 79);
+    border: 0 none;
+}
+.aboutArrow {
+    margin: auto;
+}
+.aboutNosh {
+    font-family: 'Poppins', sans-serif;
+    color: white;
+    text-align: center;
+    background: linear-gradient(to top left, rgb(255, 77, 0), rgb(255, 144, 21));
+}
+
+/* results page navbar */
+.resultsBody {
+    background: linear-gradient(to top left, rgb(255, 77, 0), rgb(255, 144, 21));
+    background-repeat: no-repeat;
+    height: 100% !important;
+}
+.resultSpan {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    background: none !important;
+    color: white;
+}
+.resultName {
+    display: flex;
+    justify-content: flex-start !important;
+}
+.phoneDirBtn {
+    display: flex;
+    justify-content: flex-end;
+    background-color: red;
+    color: white; 
+    border: none;
+}
+.phoneDirBtn:hover {
+    background-color: orangered;
+    color: white; 
+}
+
+/* results page carousel */
+.slide {
+    margin: auto;
+    width: 50%;
+    height: 300px !important;
+  }
+  .carousel-inner{
+    height: 300px !important;
+    border-radius: 55px 55px 55px 55px;
+    overflow: hidden;
+  }
