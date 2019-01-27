@@ -49,3 +49,10 @@ body {
     margin: $jumbotron-padding 0 0;
     padding: ($jumbotron-padding * 2) ($jumbotron-padding/2);
 }
+
+.nosh-lucky {
+    font-style: italic;
+    font-weight: 300;
+    //font-family: "Muli", sans-serif;
+    font-size: 1.25rem;
+}
