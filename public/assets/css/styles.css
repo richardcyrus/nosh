@@ -109,3 +109,25 @@ html {
     font-family: 'Muli', sans-serif;
     border-radius: 0px 0px 20px 20px;
 }
+.otherResultsBtn {
+    margin-bottom: 20px;
+}
+
+/* dial page */
+.progressTitle {
+    font-family: 'Muli', sans-serif;
+    color: white;
+    margin-top: 20px;
+}
+.dialBody {
+    background: linear-gradient(to top left, rgb(255, 77, 0), rgb(255, 144, 21));
+    background-repeat: no-repeat;
+    height: 100% !important;
+}
+.dialNav {
+    background: none;
+    font-family: 'Muli', sans-serif;
+}
+.noshMeBtn {
+    margin-top: 20px;
+}
