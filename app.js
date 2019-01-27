@@ -11,6 +11,7 @@ const logger = require('morgan');
 const sassMiddleware = require('node-sass-middleware');
 const helmet = require('helmet');
 const exphbs = require('express-handlebars');
+const favicon = require('express-favicon');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -38,7 +39,20 @@ app.use(
         sourceMap: true,
     })
 );
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(favicon(path.join(__dirname, 'public/assets/images/nosh_n.png')));
+app.use('/', express.static(path.join(__dirname, 'public')));
+app.use(
+    '/js/lib',
+    express.static(path.join(__dirname, 'node_modules/jquery/dist'))
+);
+app.use(
+    '/js/lib',
+    express.static(path.join(__dirname, 'node_modules/popper.js/dist/umd'))
+);
+app.use(
+    '/js/lib',
+    express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js'))
+);
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

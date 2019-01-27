@@ -1,0 +1,25 @@
+// Google Fonts
+@import url('https://fonts.googleapis.com/css?family=Muli:300,400,400i,600,700');
+
+// Change these to match the theme!
+//$red: #dc3545;
+//$orange: #fd7e14;
+//$yellow: #ffc107;
+//$green: #28a745;
+
+$primary: #f05123;
+// Options
+//
+// Quickly modify global styling by enabling or disabling optional features.
+$enable-shadows: true;
+
+// Fonts
+//
+// Font, line-height, and color for body text, headings, and more.
+
+// stylelint-disable value-keyword-case
+$font-family-sans-serif: "Muli", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+// stylelint-enable value-keyword-case
+
+$font-weight-lighter: 300;
+$headings-font-weight: 600;

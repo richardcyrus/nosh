@@ -1,0 +1,51 @@
+//@import "node_modules/@ladjs/bootstrap-social/bootstrap-social.scss";
+body {
+    height: 100vh;
+}
+
+.gradient {
+    background-image: linear-gradient(to top left, rgb(234, 55, 22), rgb(246, 121, 16), rgb(255, 179, 102) );
+}
+
+.splash-page {
+    min-height: 100vh;
+    //min-width: 100vw;
+    background-image: url('../images/main_page_bg.jpg');
+    background-attachment: fixed;
+    background-origin: border-box;
+    background-repeat: repeat-y;
+    background-position-x: center;
+    background-position-y: center;
+    background-size: 100% auto;
+    padding: 0;
+}
+
+.mainTitle {
+    display: flex;
+    justify-content: space-around;
+    align-content: center;
+    flex-flow: column nowrap;
+    align-items: center;
+    height: 100vh;
+}
+
+.start-button {
+    text-transform: lowercase;
+}
+
+.nosh-svg {
+    width: 50%;
+}
+
+.about-svg {
+    max-width: 5%;
+    cursor: s-resize;
+}
+
+.about-nosh {
+    color: $white;
+    background-color: rgb(246, 121, 16);
+    text-align: center;
+    margin: $jumbotron-padding 0 0;
+    padding: ($jumbotron-padding * 2) ($jumbotron-padding/2);
+}
