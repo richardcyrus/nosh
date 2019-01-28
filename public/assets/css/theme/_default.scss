@@ -4,7 +4,8 @@ body {
 }
 
 .gradient {
-    background-image: linear-gradient(to top left, rgb(234, 55, 22), rgb(246, 121, 16), rgb(255, 179, 102) );
+    //background-image: linear-gradient(to top left, #ff4d00, #ff4d00, #ff9015);
+    background-image: linear-gradient(315deg, #ff4d00, #ff4d00, #ff9015);
 }
 
 .splash-page {
@@ -37,17 +38,18 @@ body {
     width: 50%;
 }
 
-.about-svg {
-    max-width: 5%;
-    cursor: s-resize;
-}
-
 .about-nosh {
     color: $white;
     background-color: rgb(246, 121, 16);
     text-align: center;
     margin: $jumbotron-padding 0 0;
     padding: ($jumbotron-padding * 2) ($jumbotron-padding/2);
+    height: 22rem;
+}
+
+.spacer {
+    min-height: 35vh;
+    max-height: 85vh;
 }
 
 .nosh-lucky {
