@@ -8,6 +8,7 @@ html {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    margin-top: 20px;
     height: 100%;
 }
 .homeBody {
@@ -39,6 +40,9 @@ html {
 }
 .aboutArrow {
     margin: auto;
+}
+.aboutDiv {
+    height: 1000px;
 }
 .aboutNosh {
     font-family: 'Muli', sans-serif;
