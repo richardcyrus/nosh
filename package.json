@@ -7,7 +7,7 @@
     "start": "node ./bin/www",
     "lint": "./node_modules/.bin/eslint '**/*.js' --quiet",
     "fix": "./node_modules/.bin/eslint --fix .",
-    "test": "npm run lint"
+    "test": "npm run lint && NODE_ENV=test ./node_modules/.bin/mocha -u tdd --reporter spec --exit"
   },
   "repository": {
     "type": "git",
@@ -22,6 +22,7 @@
   "homepage": "https://github.com/richardcyrus/nosh#readme",
   "dependencies": {
     "@ladjs/bootstrap-social": "^7.0.2",
+    "axios": "^0.18.0",
     "bootstrap": "^4.2.1",
     "cookie-parser": "^1.4.3",
     "debug": "^4.1.1",
@@ -36,17 +37,22 @@
     "mysql2": "^1.6.4",
     "node-sass-middleware": "^0.11.0",
     "popper.js": "^1.14.6",
+    "qs": "^6.6.0",
     "sequelize": "^4.42.0"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
     "eslint": "^5.12.1",
     "eslint-config-prettier": "^4.0.0",
     "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-chai-friendly": "^0.4.1",
     "eslint-plugin-import": "2.15.0",
     "eslint-plugin-node": "^8.0.1",
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
+    "mocha": "^5.2.0",
     "prettier": "^1.16.1",
     "sequelize-cli": "^5.4.0"
   }

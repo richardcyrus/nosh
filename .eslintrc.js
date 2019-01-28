@@ -7,7 +7,7 @@
 
 module.exports = {
     'extends': 'prettier',
-    'plugins': ['prettier'],
+    'plugins': ['prettier', 'chai-friendly'],
     'rules': {
         'accessor-pairs': 'error',
         'array-callback-return': 'error',
@@ -175,6 +175,7 @@ module.exports = {
         'no-cond-assign': ['error', 'always'],
         'no-console': 'off',
         'prettier/prettier': 'error',
+        'chai-friendly/no-unused-expressions': 2
     },
     'parserOptions': {
         'ecmaVersion': 10,
@@ -187,6 +188,7 @@ module.exports = {
         'browser': true,
         'commonjs': true,
         'node': true,
-        'es6': true
+        'es6': true,
+        'mocha': true
     }
 };
