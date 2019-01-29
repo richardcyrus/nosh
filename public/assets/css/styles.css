@@ -134,9 +134,26 @@ html {
 }
 .noshMeBtn {
     margin-top: 20px;
+    background-color: white;
+    color: #019D4E;
+    border: none;
+}
+.noshMeBtn:hover {
+    background-color: #ABD591;
 }
 
 /* selector */
+#slider01 {
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+#slider01 .rs-inner {
+    background: linear-gradient(to top left, rgb(255, 77, 0), rgb(255, 144, 21));
+}
+#slider01 .rs-border {
+    border: none;
+}
 #slider01 .static {
     cursor: not-allowed;
   }
@@ -162,31 +179,11 @@ html {
     top: -9px;
     left: -28px;
 }
-
-
-
-/* alternate style */
-/*#appearance7 .rs-range-color  {
-    background-color: #019D4E;
+.iconDiv {
+    margin: auto;
+    text-align: center;
 }
-#appearance7 .rs-path-color  {
-    background-color: #ABD591;
+.iconSelection {
+    margin: auto;
+    color: white;
 }
-#appearance7 .rs-handle  {
-    background-color: #ABD591;
-    padding: 7px;
-    border: 2px solid #ABD591;
-}
-#appearance7 .rs-handle.rs-focus  {
-    border-color: #019D4E;
-}
-#appearance7 .rs-handle:after  {
-    border-color: #019D4E;
-    background-color: #019D4E;
-}
-#appearance7 .rs-border  {
-    border-color: transparent;
-}
-#appearance7 .inner-tooltip  {
-    font-family: 'Muli', sans-serif;
-}*/

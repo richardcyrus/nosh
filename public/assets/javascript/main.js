@@ -13,10 +13,10 @@
   $(".aboutArrow").click(function() {
     $('html,body').animate({
         scrollTop: $(".aboutDiv").offset().top},
-        1500);
+        2000);
 });
 
-//selector//
+//distance selector//
 $(document).ready(function(){
     
     var counter = 0;
@@ -43,7 +43,7 @@ $("#slider01").roundSlider({
 
 });
 
-
+//icon selector//
 $(".imgBtn").click(function(e){
     e.preventDefault();
     
@@ -77,21 +77,4 @@ $(".imgBtn").click(function(e){
 
     
 })
-})
-
-//other style//
-$("#appearance7").roundSlider({
-    radius: 170,
-    startAngle: 90,
-    width: 8,
-    handleSize: "+16",
-    handleShape: "dot",
-    sliderType: "min-range",
-    value: 10,
-
-    tooltipFormat: function (e) {
-        var handle = this._handles().html("<div class='inner-tooltip'></div>");
-        handle.children().html(this.options.value).rsRotate(-e.handle.angle);
-        return this.options.rangeValue;
-    }
 });
