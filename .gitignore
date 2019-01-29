@@ -177,3 +177,4 @@ typings/
 .next
 
 *.map
+session.sqlite
