@@ -182,8 +182,25 @@ html {
 .iconDiv {
     margin: auto;
     text-align: center;
+    z-index: 3;
+    color: white;
+    position: relative;
+    bottom: 225px;
+}
+/* this works for a specific screen size */
+/* .iconDiv {
+    margin: auto;
+    text-align: center;
+}
+.iconDiv {
+    position: absolute;
+    top: 210px;
+    right: 530px;
+    width: 200px;
+    height: 100px;
+    z-index: 3;
 }
 .iconSelection {
     margin: auto;
     color: white;
-}
+} */
