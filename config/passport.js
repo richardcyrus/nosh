@@ -61,7 +61,7 @@ passport.use(
                 .then((user) => {
                     if (!user) {
                         return done(null, false, {
-                            message: 'Incorrect username or password.',
+                            msg: 'Incorrect username or password.',
                         });
                     }
 
@@ -70,7 +70,7 @@ passport.use(
                         .then((isMatch) => {
                             if (!isMatch) {
                                 return done(null, false, {
-                                    message: 'Incorrect username or password.',
+                                    msg: 'Incorrect username or password.',
                                 });
                             } else {
                                 req.session.lat = user.Profile.latitude;
@@ -110,7 +110,7 @@ passport.use(
                 .spread((user, created) => {
                     if (user && !created) {
                         return done(null, false, {
-                            message: 'That email address is already taken!',
+                            msg: 'That email address is already taken!',
                         });
                     }
 
@@ -152,7 +152,7 @@ passport.use(
                 .spread((user, created) => {
                     if (!created && !user) {
                         return done(null, false, {
-                            message: 'Your profile has not been created!',
+                            msg: 'Your profile has not been created!',
                         });
                     }
 
@@ -160,7 +160,7 @@ passport.use(
                         return done(null, user);
                     } else {
                         return done(null, false, {
-                            message:
+                            msg:
                                 'An error occurred while storing your profile!',
                         });
                     }

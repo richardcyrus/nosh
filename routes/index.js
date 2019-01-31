@@ -5,6 +5,7 @@
 
 const express = require('express');
 const router = express.Router();
+const { check, validationResult } = require('express-validator/check');
 const passport = require('passport');
 const { ensureLoggedIn, ensureNotLoggedIn } = require('connect-ensure-login');
 const db = require('../models');
@@ -32,37 +33,43 @@ router.get('/login', ensureNotLoggedIn(), (req, res, next) => {
 });
 
 /* POST /login */
-router.post('/login', (req, res, next) => {
-    req.assert(
-        'email',
-        'The provided email address is not a valid format.'
-    ).isEmail();
-    req.assert('password', 'The password field cannot be empty.').notEmpty();
-    req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
+router.post(
+    '/login',
+    [
+        check('email', 'The provided email address is not a valid format.')
+            .isEmail({ domain_specific_validation: true })
+            .normalizeEmail({ gmail_remove_dots: false }),
+        check('password', 'The password field cannot be empty.')
+            .not()
+            .isEmpty(),
+    ],
+    (req, res, next) => {
+        const errors = validationResult(req);
 
-    const errors = req.validationErrors();
-
-    if (errors) {
-        req.flash('errors', errors);
-        return res.redirect('/login');
-    }
-
-    passport.authenticate('local', (err, user, info) => {
-        if (err) return next(err);
-
-        if (!user) {
-            req.flash('errors', info);
+        if (!errors.isEmpty()) {
+            req.flash('errors', errors.array());
             return res.redirect('/login');
         }
 
-        req.logIn(user, (err) => {
+        passport.authenticate('local', (err, user, info) => {
             if (err) return next(err);
 
-            req.flash('success', { message: 'Success! You are logged in.' });
-            res.redirect(req.session.returnTo || '/welcome');
-        });
-    })(req, res, next);
-});
+            if (!user) {
+                req.flash('errors', info);
+                return res.redirect('/login');
+            }
+
+            req.logIn(user, (err) => {
+                if (err) return next(err);
+
+                req.flash('success', {
+                    msg: 'Success! You are logged in.',
+                });
+                res.redirect(req.session.returnTo || '/welcome');
+            });
+        })(req, res, next);
+    }
+);
 
 /* GET /logout */
 router.get('/logout', (req, res, next) => {

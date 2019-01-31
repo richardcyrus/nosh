@@ -19,7 +19,6 @@ const cors = require('cors');
 const csrf = require('csurf');
 const passport = require('./config/passport');
 const flash = require('express-flash');
-const expressValidator = require('express-validator');
 
 const appConfig = require('./config/app-config');
 
@@ -40,7 +39,6 @@ app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(expressValidator());
 app.use(cookieParser());
 app.use(
     sassMiddleware({
