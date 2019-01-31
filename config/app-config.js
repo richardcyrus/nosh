@@ -16,6 +16,6 @@ module.exports = {
         secret: process.env.SESSION_SECRET,
     },
     crypt: {
-        workFactor: process.env.SALT_WORK_FACTOR,
+        workFactor: parseInt(process.env.SALT_WORK_FACTOR),
     },
 };

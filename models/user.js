@@ -4,7 +4,7 @@
  */
 
 const bcrypt = require('bcrypt');
-const config = require('../config/app-config');
+const appConfig = require('../config/app-config');
 
 module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define(
@@ -95,7 +95,7 @@ module.exports = (sequelize, DataTypes) => {
         // findOrCreate.
         if (user.changed('password') && user.password !== 'external') {
             return bcrypt
-                .hash(user.password, config.crypt.workFactor)
+                .hash(user.password, appConfig.crypt.workFactor)
                 .then((hash) => {
                     user.password = hash;
                 })
