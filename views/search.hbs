@@ -1,0 +1,36 @@
+{{>navbar}}
+{{>flash}}
+<div class="container-fluid text-center">
+    <h3>Use the dial and other selectors below to set your search parameters.</h3>
+    <a href="#" class="btn btn-lg btn-light get-location" role="button">
+        <span class="fas fa-map-marker-alt"></span>
+    </a>
+    <div id="cuisines">
+        <form action="/search" method="post">
+            <input type="hidden" name="_csrf" value="{{csrf_header}}">
+            <div class="form-group">
+                <label for="cuisine-select">Choose a Cuisine:</label>
+                <select name="cuisine-select" class="form-control" id="cuisine-select">
+                    <option value="">--Please choose an option--</option>
+                    {{#if cuisines}}
+                        {{#each cuisines}}
+                            <option data-cuisines-id="{{this.cuisine_id}}" value="{{this.cuisine_id}}">{{this.cuisine_name}}</option>
+                        {{/each}}
+                    {{/if}}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="search-radius">Choose the search radius</label>
+                <select name="search-radius" id="search-radius" class="form-control">
+                    <option value="3">3 miles</option>
+                    <option value="6">6 miles</option>
+                    <option value="9">9 miles</option>
+                    <option value="12">12 miles</option>
+                    <option value="15">15 miles</option>
+                    <option value="18">18 miles</option>
+                </select>
+            </div>
+            <button class="btn btn-danger btn-lg" type="submit">nosh me</button>
+        </form>
+    </div>
+</div>

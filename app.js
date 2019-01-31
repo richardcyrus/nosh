@@ -12,9 +12,18 @@ const sassMiddleware = require('node-sass-middleware');
 const helmet = require('helmet');
 const exphbs = require('express-handlebars');
 const favicon = require('express-favicon');
+const session = require('express-session');
+const Sequelize = require('sequelize');
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
+const cors = require('cors');
+const csrf = require('csurf');
+const passport = require('./config/passport');
+const flash = require('express-flash');
+const expressValidator = require('express-validator');
+
+const appConfig = require('./config/app-config');
 
 const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
 
 const app = express();
 
@@ -27,9 +36,11 @@ app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 
 app.use(helmet());
+app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(expressValidator());
 app.use(cookieParser());
 app.use(
     sassMiddleware({
@@ -39,8 +50,53 @@ app.use(
         sourceMap: true,
     })
 );
+
+// Configure a session storage handler for express-session.
+const sessionStore = new SequelizeStore({
+    db: new Sequelize(null, null, null, {
+        dialect: 'sqlite',
+        storage: './session.sqlite',
+    }),
+    checkExpirationInterval: 15 * 60 * 1000,
+    expiration: 24 * 60 * 60 * 1000,
+});
+
+const sessionOptions = {
+    secret: appConfig.session.secret,
+    resave: false,
+    saveUninitialized: false,
+    store: sessionStore,
+    cookie: { maxAge: 86400 },
+};
+
+sessionStore.sync();
+
+if (app.get('env') === 'production') {
+    app.set('trust proxy', 1);
+    sessionOptions.cookie.secure = true;
+    sessionOptions.proxy = true;
+}
+app.use(session(sessionOptions));
+
+app.use(csrf({ cookie: false }));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use(flash());
+
+app.use((req, res, next) => {
+    res.locals.user = req.user;
+    next();
+});
+
+// Set the site favicon
 app.use(favicon(path.join(__dirname, 'public/assets/images/nosh_n.png')));
+
+// Register the location of static files.
 app.use('/', express.static(path.join(__dirname, 'public')));
+
+// Register library paths for frontend modules installed with node.
 app.use(
     '/js/lib',
     express.static(path.join(__dirname, 'node_modules/jquery/dist'))
@@ -53,9 +109,19 @@ app.use(
     '/js/lib',
     express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js'))
 );
+app.use(
+    '/js/lib/fontawesome',
+    express.static(
+        path.join(__dirname, 'node_modules/@fortawesome/fontawesome-free/js')
+    )
+);
+app.use(
+    '/css/lib/bootstrap-social',
+    express.static(path.join(__dirname, 'node_modules/@ladjs/bootstrap-social'))
+);
 
+// Process routes
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
