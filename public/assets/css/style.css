@@ -5853,7 +5853,9 @@ body {
   height: 100vh; }
 
 .gradient, .search-page,
-.login-page {
+.login-page,
+.signup-page,
+.profile-page {
   background-image: linear-gradient(315deg, #ff4d00, #ff4d00, #ff9015); }
 
 .navbar {
@@ -5910,10 +5912,22 @@ body {
   font-weight: 300;
   font-size: 1.25rem; }
 
-.login-page h3, .login-page h2, .login-page label, .login-page button {
+.login-page h3, .login-page h2, .login-page label, .login-page button,
+.signup-page h3,
+.signup-page h2,
+.signup-page label,
+.signup-page button,
+.profile-page h3,
+.profile-page h2,
+.profile-page label,
+.profile-page button {
   text-transform: lowercase; }
 
-.login-card {
+.login-card,
+.signup-card,
+.profile-card,
+.password-card,
+.delete-card {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -5924,13 +5938,25 @@ body {
   background-clip: border-box;
   border: 1px solid rgba(0, 0, 0, 0.125);
   border-radius: 0.25rem; }
-  .login-card > hr {
+  .login-card > hr,
+  .signup-card > hr,
+  .profile-card > hr,
+  .password-card > hr,
+  .delete-card > hr {
     margin-right: 0;
     margin-left: 0; }
-  .login-card > .list-group:first-child .list-group-item:first-child {
+  .login-card > .list-group:first-child .list-group-item:first-child,
+  .signup-card > .list-group:first-child .list-group-item:first-child,
+  .profile-card > .list-group:first-child .list-group-item:first-child,
+  .password-card > .list-group:first-child .list-group-item:first-child,
+  .delete-card > .list-group:first-child .list-group-item:first-child {
     border-top-left-radius: 0.25rem;
     border-top-right-radius: 0.25rem; }
-  .login-card > .list-group:last-child .list-group-item:last-child {
+  .login-card > .list-group:last-child .list-group-item:last-child,
+  .signup-card > .list-group:last-child .list-group-item:last-child,
+  .profile-card > .list-group:last-child .list-group-item:last-child,
+  .password-card > .list-group:last-child .list-group-item:last-child,
+  .delete-card > .list-group:last-child .list-group-item:last-child {
     border-bottom-right-radius: 0.25rem;
     border-bottom-left-radius: 0.25rem; }
 

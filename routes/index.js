@@ -20,7 +20,7 @@ router.get('/', (req, res, next) => {
 });
 
 /* GET /login */
-router.get('/login', ensureNotLoggedIn(), (req, res, next) => {
+router.get('/login', (req, res, next) => {
     if (req.user) {
         return res.redirect('/welcome');
     }
@@ -86,13 +86,15 @@ router.get('/logout', (req, res, next) => {
 /**
  * GET /signup
  */
-router.get('/signup', ensureNotLoggedIn(), (req, res, next) => {
+router.get('/signup', (req, res, next) => {
     if (req.user) {
-        return res.redirect('/');
+        return res.redirect('/account/profile');
     }
+
     res.render('account/signup', {
         title: 'Create Account',
         csrf: req.csrfToken(),
+        page: 'signup-page',
     });
 });
 
@@ -100,57 +102,81 @@ router.get('/signup', ensureNotLoggedIn(), (req, res, next) => {
  * POST /signup
  * Create a new local account.
  */
-router.post('/signup', (req, res, next) => {
-    req.assert('email', 'Email is not valid').isEmail();
-    req.assert('password', 'Password must be at least 4 characters long').len(
-        4
-    );
-    req.assert('confirmPassword', 'Passwords do not match').equals(
-        req.body.password
-    );
-    req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
+router.post(
+    '/signup',
+    [
+        check('email', 'Email is not valid')
+            .isEmail({ domain_specific_validation: true })
+            .normalizeEmail({ gmail_remove_dots: false }),
+        check(
+            'password',
+            'Password must be at least 8 characters long'
+        ).isLength({ min: 8 }),
+        check('confirmPassword', 'Passwords do not match').custom(
+            (value, { req }) => value === req.body.password
+        ),
+        check('firstName', 'The first name field cannot be empty')
+            .not()
+            .isEmpty(),
+        check('lastName', 'The last name field cannot be empty')
+            .not()
+            .isEmpty(),
+    ],
+    (req, res, next) => {
+        const errors = validationResult(req);
 
-    const errors = req.validationErrors();
+        if (!errors.isEmpty()) {
+            req.flash('errors', errors.array());
+            return res.redirect('/signup');
+        }
 
-    if (errors) {
-        req.flash('errors', errors);
-        return res.redirect('/signup');
-    }
+        let newUser;
+        db.User.findOrCreate({
+            where: {
+                email: req.body.email,
+            },
+            defaults: {
+                lastName: req.body.lastName,
+                firstName: req.body.firstName,
+                displayName: `${req.body.firstName} ${req.body.lastName}`,
+                email: req.body.email,
+                password: req.body.password,
+                provider: 'local',
+            },
+        })
+            .spread((user, created) => {
+                if (user && !created) {
+                    req.flash('errors', {
+                        msg: 'That email address is already taken!',
+                    });
+                    return res.redirect('/signup');
+                }
 
-    db.User.findOrCreate({
-        where: {
-            email: req.body.email,
-        },
-        defaults: {
-            lastName: req.body.lastName,
-            firstName: req.body.firstName,
-            displayName: `${req.body.firstName} ${req.body.lastName}`,
-            email: req.body.email,
-            password: req.body.password,
-            provider: 'local',
-        },
-    })
-        .spread((user, created) => {
-            if (user && !created) {
-                req.flash('errors', {
-                    message: 'That email address is already taken!',
-                });
-                return res.redirect('/signup');
-            }
+                if (user && created) {
+                    newUser = user;
 
-            if (user && created) {
-                req.logIn(user, (err) => {
+                    return db.Profile.create({
+                        radius: 3,
+                        searchResults: 3,
+                    });
+                }
+            })
+            .then((profile) => {
+                return newUser.setProfile(profile);
+            })
+            .then(() => {
+                req.logIn(newUser, (err) => {
                     if (err) {
                         return next(err);
                     }
-                    res.redirect(req.session.returnTo || '/');
+                    res.redirect(req.session.returnTo || '/welcome');
                 });
-            }
-        })
-        .catch((err) => {
-            return next(err);
-        });
-});
+            })
+            .catch((err) => {
+                return next(err);
+            });
+    }
+);
 
 /* GET /welcome */
 router.get('/welcome', ensureLoggedIn('/login'), (req, res, next) => {
@@ -174,10 +200,14 @@ router.get('/welcome', ensureLoggedIn('/login'), (req, res, next) => {
                     csrf_header: req.csrfToken(),
                 });
             });
+    } else {
+        // Show the page with inputs for the Zomato Query. The user didn't
+        // Provide their location during sign-up.
+        res.render('search', {
+            page: 'search-page',
+            csrf_header: req.csrfToken(),
+        });
     }
-
-    // Show the page with inputs for the Zomato Query. The user didn't
-    // Provide their location during sign-up.
 });
 
 /* POST /search/setup */

@@ -81,18 +81,26 @@ body {
 // Pages
 
 .search-page,
-.login-page {
+.login-page,
+.signup-page,
+.profile-page {
     @extend .gradient;
 }
 
-.login-page {
+.login-page,
+.signup-page,
+.profile-page {
     h3, h2, label, button {
         text-transform: lowercase;
     }
 }
 
 // Cards
-.login-card {
+.login-card,
+.signup-card,
+.profile-card,
+.password-card,
+.delete-card {
     position: relative;
     display: flex;
     flex-direction: column;
