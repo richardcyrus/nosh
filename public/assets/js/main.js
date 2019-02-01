@@ -78,4 +78,12 @@
             console.error('The browser does not support geolocation!');
         }
     });
+    $('.alert[data-auto-dismiss]').each(function(index, element) {
+        const $element = $(element);
+        const timeout = $element.data('auto-dismiss') || 5000;
+
+        setTimeout(function() {
+            $element.alert('close');
+        }, timeout);
+    });
 })(jQuery);
