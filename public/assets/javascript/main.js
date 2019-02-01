@@ -1,5 +1,4 @@
-
-  //fade away for the nosh title//
+//fade away for the nosh title//
   $(window).scroll(function(){
     $(".noshSvg").css("opacity", 1 - $(window).scrollTop() / 250);
   });
@@ -49,7 +48,7 @@ $(".iconDiv").click(function(e){
 
     $(this).find('i').removeClass("pe-is-f-sushi-2");
 
-    foodList = {
+    foodList = { 
         American:"pe-is-f-hot-dog-f",
         Asian:"pe-is-f-sushi-4-f",
         BBQ:"pe-is-f-barbecue-2-f",
@@ -92,7 +91,7 @@ $(".iconDiv").click(function(e){
 
     counter++;
     
-    $(this).find('i').addClass(foodList.Stringify(foodArray[counter]));
+    $(this).find('i').addClass(foodList.BBQ);
 
     // $(this).find('i').removeClass(foodList.American).addClass(foodList.BBQ);
 })
