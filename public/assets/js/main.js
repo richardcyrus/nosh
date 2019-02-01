@@ -4,6 +4,7 @@
  */
 
 /* global jQuery */
+/* eslint-disable func-style */
 
 (function($) {
     const cuisineList = $('#cuisine-select');
@@ -40,6 +41,11 @@
         });
     };
 
+    const profileGeo = function(position) {
+        $('input[name="latitude"]').val(position.coords.latitude);
+        $('input[name="longitude"]').val(position.coords.longitude);
+    };
+
     const geoError = function(error) {
         switch (error.code) {
             case error.PERMISSION_DENIED:
@@ -56,6 +62,8 @@
                 break;
         }
     };
+
+    $('[data-toggle="tooltip"]').tooltip();
 
     $(window).scroll(function() {
         $('.mainTitle').css('opacity', 1 - $(window).scrollTop() / 250);
@@ -78,6 +86,15 @@
             console.error('The browser does not support geolocation!');
         }
     });
+
+    $('.update-location').on('click', function() {
+        if ('geolocation' in navigator) {
+            navigator.geolocation.getCurrentPosition(profileGeo, geoError);
+        } else {
+            console.error('The browser does not support geolocation!');
+        }
+    });
+
     $('.alert[data-auto-dismiss]').each(function(index, element) {
         const $element = $(element);
         const timeout = $element.data('auto-dismiss') || 5000;

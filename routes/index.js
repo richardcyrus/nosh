@@ -7,7 +7,7 @@ const express = require('express');
 const router = express.Router();
 const { check, validationResult } = require('express-validator/check');
 const passport = require('passport');
-const { ensureLoggedIn, ensureNotLoggedIn } = require('connect-ensure-login');
+const { ensureLoggedIn } = require('connect-ensure-login');
 const db = require('../models');
 
 const config = require('../config/app-config');
@@ -178,6 +178,155 @@ router.post(
     }
 );
 
+/**
+ * GET /account
+ */
+router.get('/account', ensureLoggedIn('/login'), (req, res, next) => {
+    res.render('account/profile', {
+        title: 'Account Management',
+        csrf: req.csrfToken(),
+        page: 'profile-page',
+        user: req.user,
+    });
+});
+
+/**
+ * POST /account/profile
+ */
+router.post(
+    '/account/profile',
+    [
+        check('email', 'Email is not valid')
+            .not()
+            .isEmpty()
+            .isEmail({ domain_specific_validation: true })
+            .normalizeEmail({ gmail_remove_dots: false }),
+        check('firstName', 'The first name field cannot be empty')
+            .not()
+            .isEmpty(),
+        check('lastName', 'The last name field cannot be empty')
+            .not()
+            .isEmpty(),
+        check('displayName', 'The display name field cannot be empty')
+            .not()
+            .isEmpty(),
+        check('photo', 'The photo needs to be a valid URL')
+            .optional({ checkFalsy: true })
+            .isURL(),
+        check('latitude')
+            .optional({ checkFalsy: true })
+            .matches(/^\(?[+-]?(90(\.0+)?|[1-8]?\d(\.\d+)?)$/),
+        check('longitude')
+            .optional({ checkFalsy: true })
+            .matches(
+                /^\s?[+-]?(180(\.0+)?|1[0-7]\d(\.\d+)?|\d{1,2}(\.\d+)?)\)?$/
+            ),
+        check('radius', 'Enter a search radius of at least 3 miles.')
+            .toInt()
+            .isInt({
+                min: 3,
+            }),
+        check('searchResults', 'The minimum number of results is 3')
+            .toInt()
+            .isInt({
+                min: 3,
+            }),
+    ],
+    (req, res, next) => {
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            req.flash('errors', errors.array());
+            return res.redirect('/account');
+        }
+
+        const profileUpdate = {
+            photo: req.body.photo,
+            latitude: req.body.latitude,
+            longitude: req.body.longitude,
+            radius: req.body.radius,
+            searchResults: req.body.searchResults,
+        };
+        const userUpdate = {
+            email: req.body.email,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            displayName: req.body.displayName,
+        };
+
+        /**
+         * Hints on how to make this work properly came from:
+         * https://github.com/RobinBuschmann/sequelize-typescript/issues/309#issuecomment-367443345
+         * https://stackoverflow.com/questions/33918383/sequelize-update-with-association
+         */
+        db.User.findByPk(req.user.id, {
+            include: [{ model: db.Profile, as: 'Profile' }],
+        })
+            .then((user) => {
+                Promise.all([
+                    user.update(userUpdate),
+                    user.Profile.update(profileUpdate),
+                ])
+                    .then((value) => value[0])
+                    .then(() => {
+                        req.flash('success', {
+                            msg: 'Profile information has been updated.',
+                        });
+                        res.redirect('/account');
+                    })
+                    .catch((err) => next(err));
+            })
+            .catch((err) => next(err));
+    }
+);
+
+/**
+ * POST /account/password
+ */
+router.post(
+    '/account/password',
+    [
+        check(
+            'password',
+            'Password must be at least 8 characters long'
+        ).isLength({ min: 8 }),
+        check('confirmPassword', 'Passwords do not match').custom(
+            (value, { req }) => value === req.body.password
+        ),
+    ],
+    (req, res, next) => {
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            req.flash('errors', errors.array());
+            return res.redirect('/account');
+        }
+
+        db.User.findByPk(req.user.id)
+            .then((user) => {
+                user.update({ password: req.body.password }).then(() => {
+                    req.flash('success', { msg: 'Password has been changed.' });
+                    res.redirect('/logout');
+                });
+            })
+            .catch((err) => next(err));
+    }
+);
+
+/**
+ * POST /account/delete
+ */
+router.post('/account/delete', (req, res, next) => {
+    db.User.findByPk(req.user.id)
+        .then((user) => {
+            return user.destroy();
+        })
+        .then(() => {
+            req.flash('info', { msg: 'Your account has been deleted.' });
+            res.redirect('/logout');
+        });
+});
+
 /* GET /welcome */
 router.get('/welcome', ensureLoggedIn('/login'), (req, res, next) => {
     // If the user has lat and lon in their profile, we pushed to the
@@ -275,21 +424,5 @@ router.post('/search', ensureLoggedIn('/login'), (req, res, next) => {
         res.json(results);
     });
 });
-
-router.get(
-    '/auth/google',
-    passport.authenticate('google', {
-        scope: ['profile', 'email'],
-        prompt: 'select_account',
-    })
-);
-
-router.get(
-    '/auth/google/redirect',
-    passport.authenticate('google', {
-        successRedirect: '/',
-        failureRedirect: '/login',
-    })
-);
 
 module.exports = router;
