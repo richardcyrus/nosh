@@ -4,8 +4,11 @@ body {
 }
 
 .gradient {
-    //background-image: linear-gradient(to top left, #ff4d00, #ff4d00, #ff9015);
     background-image: linear-gradient(315deg, #ff4d00, #ff4d00, #ff9015);
+}
+
+.gradient-reverse {
+    background-image: linear-gradient(315deg, #ff9015, #ff4d00, #ff4d00);
 }
 
 // navbar
@@ -84,7 +87,17 @@ body {
 .login-page,
 .signup-page,
 .profile-page {
+    min-height: 100vh;
+}
+
+.login-page,
+.profile-page {
     @extend .gradient;
+}
+
+.signup-page,
+.search-page {
+    @extend .gradient-reverse;
 }
 
 .login-page,
@@ -147,5 +160,83 @@ body {
 
     + .card-link {
         margin-left: $card-spacer-x;
+    }
+}
+
+// radius selector
+#find-nosh {
+    align-content: space-around;
+    align-items: center;
+    display: flex;
+    flex-flow: column nowrap;
+    height: 80vh;
+    justify-content: space-evenly;
+}
+
+#radius-wheel {
+    margin-top: 6rem;
+
+    .draggable {
+        cursor: move;
+    }
+
+    .inner-tooltip {
+        color: $white;
+        display: inline-block;
+        font-family: 'Muli', sans-serif;
+        left: -33px;
+        position: absolute;
+        top: -9px;
+    }
+
+    .static {
+        cursor: not-allowed;
+    }
+
+    .rs-border {
+        border: none;
+    }
+
+    .rs-handle {
+        background-color: $white;
+        border: 2px solid #aada91;
+        padding: 0.5rem;
+    }
+
+    .rs-inner {
+        @extend .gradient-reverse;
+    }
+
+    .rs-path-color {
+        background-color: #aada91;
+    }
+
+    .rs-range-color {
+        background-color: $green;
+    }
+}
+
+#cuisine-slider {
+    bottom: 13.5rem;
+    color: $white;
+    position: relative;
+    text-align: center;
+    width: 50%;
+    z-index: 3;
+
+    p {
+        margin: 0;
+    }
+
+    .carousel-item.active,
+    .carousel-item-next,
+    .carousel-item-prev {
+        display: block;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        width: 40px;
+        height: 40px;
     }
 }

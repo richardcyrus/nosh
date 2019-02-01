@@ -1,36 +1,27 @@
 {{>navbar}}
-{{>flash}}
 <div class="container-fluid text-center">
-    <h3>Use the dial and other selectors below to set your search parameters.</h3>
-    <a href="#" class="btn btn-lg btn-light get-location" role="button">
-        <span class="fas fa-map-marker-alt"></span>
-    </a>
-    <div id="cuisines">
-        <form action="/search" method="post">
-            <input type="hidden" name="_csrf" value="{{csrf_header}}">
-            <div class="form-group">
-                <label for="cuisine-select">Choose a Cuisine:</label>
-                <select name="cuisine-select" class="form-control" id="cuisine-select">
-                    <option value="">--Please choose an option--</option>
-                    {{#if cuisines}}
-                        {{#each cuisines}}
-                            <option data-cuisines-id="{{this.cuisine_id}}" value="{{this.cuisine_id}}">{{this.cuisine_name}}</option>
-                        {{/each}}
-                    {{/if}}
-                </select>
+    {{>flash}}
+    <div id="find-nosh">
+        <h4 class="mb-4">Use the dial and other selectors below to set your search parameters.</h4>
+        <div id="radius-wheel"></div>
+        <div id="cuisine-slider" class="carousel slide" data-interval="false">
+            <div class="carousel-inner">
+                <div class="carousel-item active" data-cuisine-id="177">
+                    <p class="cuisine"><i class="pe-is-f-sushi-2 pe-5x"></i></p>
+                </div>
+                <div class="carousel-item" data-cuisine-id="193">
+                    <p class="cuisine"><i class="pe-is-f-barbecue-2-f pe-5x"></i></p>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="search-radius">Choose the search radius</label>
-                <select name="search-radius" id="search-radius" class="form-control">
-                    <option value="3">3 miles</option>
-                    <option value="6">6 miles</option>
-                    <option value="9">9 miles</option>
-                    <option value="12">12 miles</option>
-                    <option value="15">15 miles</option>
-                    <option value="18">18 miles</option>
-                </select>
-            </div>
-            <button class="btn btn-danger btn-lg" type="submit">nosh me</button>
-        </form>
+            <a class="carousel-control-prev" href="#cuisine-slider" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#cuisine-slider" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+        <button class="btn btn-danger btn-lg" type="submit">nosh me!</button>
     </div>
 </div>

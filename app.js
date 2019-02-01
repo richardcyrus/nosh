@@ -117,6 +117,10 @@ app.use(
     '/css/lib/bootstrap-social',
     express.static(path.join(__dirname, 'node_modules/@ladjs/bootstrap-social'))
 );
+app.use(
+    '/assets/lib/round-slider',
+    express.static(path.join(__dirname, 'node_modules/round-slider/dist'))
+);
 
 // Process routes
 app.use('/', indexRouter);
