@@ -16,22 +16,38 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser((id, done) => {
     db.User.findByPk(id, {
-        attributes: ['id', 'providerId', 'provider', 'displayName'],
+        attributes: {
+            exclude: [
+                'providerId',
+                'provider',
+                'token',
+                'password',
+                'passwordResetToken',
+                'passwordResetExpires',
+            ],
+        },
         include: [
             {
                 model: db.Profile,
+                as: 'Profile',
                 where: { ProfileId: db.Sequelize.col('Profile.id') },
                 attributes: [
                     'latitude',
                     'longitude',
                     'radius',
                     'searchResults',
+                    'gender',
+                    'photo',
                 ],
             },
         ],
     })
         .then((user) => {
-            done(null, user);
+            if (user) {
+                done(null, user.get({ plain: true }));
+            } else {
+                done(null, false);
+            }
         })
         .catch((err) => {
             done(err);
