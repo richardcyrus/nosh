@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+
 require('dotenv').config();
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
@@ -134,7 +136,7 @@ describe('.dailyMenu(params)', function() {
     });
     it('should return the dailymenu for the given restaurant id', function() {
         return zomato
-            .dailymenu(16507902)
+            .dailymenu({ res_id: 16507902 })
             .should.be.fulfilled.should.eventually.be.an('array');
     });
 });
