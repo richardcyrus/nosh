@@ -93,6 +93,30 @@ html {
     overflow: hidden;
   }
 
+  /* stars */
+.starsDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.checked {
+    color: rgb(255, 144, 21);
+  }
+/* restaurant details table */
+.tableTitle {
+    color: rgb(255, 77, 0);
+    font-family: 'Muli', sans-serif;
+}
+.detailsTable {
+    font-family: 'Muli', sans-serif;
+    border-radius: 0px 0px 20px 20px;
+}
+.otherResultsBtn {
+    margin-bottom: 20px;
+}
+
 /* user & welcome pages */
 
 .topfont {
@@ -130,4 +154,51 @@ html {
 .nav-link:hover {
    color: #019D4E !important;
    transition: all ease-in-out .6s;
+}
+
+/* modal css */
+
+.modal-header {
+    font-family:'Muli', sans-serif;
+    font-size: 40px;
+    text-align: center;
+    border-style: solid;
+    border-width: 2px;
+    overflow: auto; /* Enable scroll if needed */
+}
+
+
+.star{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: orangered;
+}
+
+/* The Close Button */
+.btn-secondary {
+  top: 15px;
+  right: 35px;
+  color: #FFFFFF;
+  font-size: 20px;
+  font-weight: bold;
+  transition: 0.3s;
+  background: linear-gradient(to top left, rgb(255, 77, 0), rgb(255, 144, 21));
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.btn-primary {
+    top: 15px;
+    right: 35px;
+    color:#FFFFFF;
+    font-size: 20px;
+    font-weight: bold;
+    transition: 0.3s;
+    background: linear-gradient(to top left, rgb(255, 77, 0), rgb(255, 144, 21));
+    border-radius: 8px;
+    padding: 10px;
+    
 }
