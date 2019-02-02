@@ -4,7 +4,7 @@
  */
 
 /* global jQuery */
-/* eslint-disable func-style */
+/* eslint-disable */
 
 (function($) {
     // Get the user's latitude and longitude from the browser.
@@ -112,11 +112,22 @@
                 'X-CSRF-Token': token,
             },
         }).done(function(data) {
-            // console.dir(data);
-            // data.forEach((item) => {
-            //     // Build Modal Content
-            // });
-            // $('#resultsModal').modal('show');
+            console.dir(data);
+            $('#results-container').empty();
+            data.forEach((item) => {
+                // Build Modal Content
+                $('#results-container').append(`
+<div class="card mb-3" data-restaurant-id="${item.id}">
+<div class="card-body">
+<h5 class="card-title">${item.name}</h5>
+<p class="card-text">${item.address}<br>
+Website:&nbsp;<a href="${item.url}" class="card-link">${item.name}</a><br>
+</p>
+</div>
+</div>
+                `);
+            });
+            $('#resultsModal').modal('show');
         });
     });
 })(jQuery);
