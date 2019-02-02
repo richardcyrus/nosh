@@ -5,10 +5,8 @@
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const db = require('../models');
-const config = require('./app-config');
 
 passport.serializeUser((user, done) => {
     done(null, user.id);
@@ -132,53 +130,6 @@ passport.use(
 
                     if (user && created) {
                         return done(null, user);
-                    }
-                })
-                .catch((err) => {
-                    return done(err);
-                });
-        }
-    )
-);
-
-passport.use(
-    new GoogleStrategy(
-        {
-            clientID: config.google.clientID,
-            clientSecret: config.google.clientSecret,
-            callbackURL: config.google.callbackURL,
-        },
-        (accessToken, refreshToken, profile, done) => {
-            db.User.findOrCreate({
-                where: {
-                    providerId: profile.id,
-                },
-                defaults: {
-                    displayName: profile.displayName,
-                    lastName: profile.name.familyName,
-                    firstName: profile.name.givenName,
-                    // gender: profile.gender,
-                    // email: profile.emails[0].value,
-                    // photo: profile.photos[0].value,
-                    provider: profile.provider,
-                    token: accessToken,
-                    password: 'external',
-                },
-            })
-                .spread((user, created) => {
-                    if (!created && !user) {
-                        return done(null, false, {
-                            msg: 'Your profile has not been created!',
-                        });
-                    }
-
-                    if (user) {
-                        return done(null, user);
-                    } else {
-                        return done(null, false, {
-                            msg:
-                                'An error occurred while storing your profile!',
-                        });
                     }
                 })
                 .catch((err) => {

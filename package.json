@@ -46,7 +46,6 @@
     "mysql2": "^1.6.4",
     "node-sass-middleware": "^0.11.0",
     "passport": "^0.4.0",
-    "passport-google-oauth20": "^1.0.0",
     "passport-local": "^1.0.0",
     "popper.js": "^1.14.6",
     "qs": "^6.6.0",
