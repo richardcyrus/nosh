@@ -1,0 +1,17 @@
+<nav class="navbar navbar-expand navbar-dark bg-transparent">
+    <a class="navbar-brand" href="/">
+        <img src="/assets/images/nosh_nav_logo-01.svg" height="30" alt="nosh">
+    </a>
+    <div class="collapse navbar-collapse justify-content-end">
+        <ul class="navbar-nav">
+            {{#if user}}
+                <li class="nav-item"><a href="/welcome" class="nav-link text-white">Search</a></li>
+                <li class="nav-item"><a href="/account" class="nav-link text-white">Profile</a></li>
+                <li class="nav-item"><a href="/logout" class="nav-link text-white">Logout</a></li>
+            {{else}}
+                <li class="nav-item"><a href="/login" class="nav-link text-white">Login</a></li>
+                <li class="nav-item"><a href="/signup" class="nav-link text-white">Register</a></li>
+            {{/if}}
+        </ul>
+    </div>
+</nav>

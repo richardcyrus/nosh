@@ -1,12 +1,13 @@
 /**
- * nosh.
+ * nosh
  *
  * The Coding Boot Camp at UNC Charlotte.
  * (c) 2019 Richard Cyrus, Teddy Johnson, Sara Minerva, Yobany Perez
  */
 
 module.exports = {
-    'extends': 'standard',
+    'extends': 'prettier',
+    'plugins': ['prettier', 'chai-friendly'],
     'rules': {
         'accessor-pairs': 'error',
         'array-callback-return': 'error',
@@ -173,6 +174,8 @@ module.exports = {
         'valid-typeof': 'error',
         'no-cond-assign': ['error', 'always'],
         'no-console': 'off',
+        'prettier/prettier': 'error',
+        'chai-friendly/no-unused-expressions': 2
     },
     'parserOptions': {
         'ecmaVersion': 10,
@@ -182,7 +185,10 @@ module.exports = {
         }
     },
     'env': {
+        'browser': true,
+        'commonjs': true,
         'node': true,
-        'es6': true
+        'es6': true,
+        'mocha': true
     }
 };

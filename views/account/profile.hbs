@@ -1,0 +1,130 @@
+{{>navbar}}
+<div class="container-fluid">
+    {{>flash}}
+    <div class="row">
+        <div class="col-6">
+            <h2 class="text-center mb-4">Profile Information</h2>
+            <div class="card mx-auto profile-card">
+                <div class="card-body">
+                    <form action="/account/profile" method="post">
+                        <input type="hidden" name="_csrf" value="{{csrf}}">
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" class="form-control" name="email"
+                                   placeholder="john.doe@example.com"
+                                   value="{{user.email}}"
+                                   autofocus autocomplete="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" class="form-control" name="firstName" placeholder="John"
+                                   value="{{user.firstName}}"
+                                   autocomplete="given-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" class="form-control" name="lastName" placeholder="Doe"
+                                   value="{{user.lastName}}"
+                                   autocomplete="family-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="displayName">Display Name</label>
+                            <input type="text" id="displayName" class="form-control" name="displayName"
+                                   placeholder="John Doe"
+                                   autocomplete="name" value="{{user.displayName}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="photo">Photo</label>
+                            <input type="url" id="photo" class="form-control" name="photo"
+                                   autocomplete="photo" value="{{user.Profile.photo}}">
+                        </div>
+                        <div class="form-group">
+                            <div class="d-flex justify-content-between">
+                                <label for="latitude">Latitude</label>
+                                <a href="#" data-toggle="tooltip" data-placement="top" title="Update My Location (Lat,Lon)" class="btn btn-sm btn-primary update-location" role="button">
+                                    <span class="fas fa-map-marker-alt fa-xs"></span>
+                                </a>
+                            </div>
+                            <input type="text" id="latitude" class="form-control" name="latitude"
+                                   value="{{user.Profile.latitude}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="longitude">Longitude</label>
+                            <input type="text" id="longitude" class="form-control" name="longitude"
+                                   value="{{user.Profile.longitude}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="radius">Search Radius (in miles)</label>
+                            <input type="number" id="radius" class="form-control" name="radius"
+                                   min="3" max="50" value="{{user.Profile.radius}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="searchResults">Number of Results</label>
+                            <input type="number" id="searchResults" class="form-control" name="searchResults"
+                                   min="3" value="{{user.Profile.searchResults}}">
+                        </div>
+                        <div class="form-group d-flex justify-content-center">
+                            <button class="btn btn-danger" type="submit">
+                                <span class="fas fa-pencil-alt fa-sm"></span>&nbsp;Update Profile
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="row">
+                <div class="col-6">
+                    <h2 class="text-center mb-4">Change Password</h2>
+                    <div class="card mx-auto password-card">
+                        <div class="card-body">
+                            <form action="/account/password" method="post">
+                                <input type="hidden" name="_csrf" value="{{csrf}}">
+                                <div class="form-group">
+                                    <label for="password">Password</label>
+                                    <input type="password" id="password" class="form-control" name="password"
+                                           placeholder="password"
+                                           autocomplete="new-password" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">Confirm Password</label>
+                                    <input type="password" id="confirmPassword" class="form-control"
+                                           name="confirmPassword"
+                                           placeholder="confirm password"
+                                           autocomplete="new-password" required>
+                                </div>
+                                <div class="form-group d-flex justify-content-center">
+                                    <button class="btn btn-danger" type="submit">
+                                        <span class="fas fa-pencil-alt fa-sm"></span>&nbsp;Change Password
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <h2 class="text-center my-4">Delete Account</h2>
+                    <div class="card mx-auto delete-card">
+                        <div class="card-body">
+                            <form action="/account/delete" method="post"
+                                  onsubmit="return confirm('Are you sure you want to delete your account?');">
+                                <input type="hidden" name="_csrf" value="{{csrf}}">
+                                <div class="form-group">
+                                    <p class="pl-2">You can delete your account, but keep in mind this action is
+                                        irreversible.</p>
+                                </div>
+                                <div class="form-group d-flex justify-content-center">
+                                    <button class="btn btn-danger" type="submit">
+                                        <span class="fas fa-trash-alt fa-sm"></span>&nbsp;Delete my account
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
