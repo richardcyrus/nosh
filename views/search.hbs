@@ -2,16 +2,17 @@
 <div class="container-fluid text-center">
     {{>flash}}
     <div id="find-nosh">
-        <h4 class="mb-4">Use the dial and other selectors below to set your search parameters.</h4>
         <div id="radius-wheel"></div>
         <div id="cuisine-slider" class="carousel slide" data-interval="false">
             <div class="carousel-inner">
-                <div class="carousel-item active" data-cuisine-id="177">
-                    <p class="cuisine"><i class="pe-is-f-sushi-2 pe-5x"></i></p>
-                </div>
-                <div class="carousel-item" data-cuisine-id="193">
-                    <p class="cuisine"><i class="pe-is-f-barbecue-2-f pe-5x"></i></p>
-                </div>
+                {{#each cuisines}}
+                    <div class="carousel-item {{~#if @first}} active{{/if}}" data-cuisine-id="{{cuisine_id}}">
+                        <p class="cuisine"><i class="{{icon}} pe-5x"></i></p>
+                        <div class="carousel-caption d-none d-md-block">
+                            <p class="cuisine-name">{{cuisine_name}}</p>
+                        </div>
+                    </div>
+                {{/each}}
             </div>
             <a class="carousel-control-prev" href="#cuisine-slider" role="button" data-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -22,6 +23,31 @@
                 <span class="sr-only">Next</span>
             </a>
         </div>
-        <button class="btn btn-danger btn-lg" type="submit">nosh me!</button>
+        <h4 class="mb-4 d-block">Use the dial to choose your search distance, and the arrows for the choice of
+            cuisine.</h4>
+        <button id="nosh-me" class="btn btn-danger btn-lg" type="button" role="button">nosh me!</button>
+    </div>
+</div>
+<div id="resultsModal" class="modal fade" role="dialog" aria-hidden="true" aria-labelledby="resultsModal" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Your Options</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <!-- Thumb | Name -->
+                    <!-- Average Cost for 2-->
+                    <!-- Address -->
+                    <!-- Website -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
 </div>

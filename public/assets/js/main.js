@@ -7,40 +7,6 @@
 /* eslint-disable func-style */
 
 (function($) {
-    const cuisineList = $('#cuisine-select');
-
-    const geoSuccess = function(position) {
-        const latitude = position.coords.latitude;
-        const longitude = position.coords.longitude;
-
-        const token = document
-            .querySelector('meta[name="csrf-token"]')
-            .getAttribute('content');
-
-        $.ajax({
-            method: 'post',
-            url: '/search/setup',
-            data: {
-                lat: latitude,
-                lon: longitude,
-            },
-            headers: {
-                'X-CSRF-Token': token,
-            },
-        }).done(function(data) {
-            data.forEach((item) => {
-                const selectItem = $('<option>')
-                    .attr({
-                        'data-cuisine-id': item.cuisine_id,
-                        'data-cuisine-name': item.cuisine_name,
-                        value: item.cuisine_id,
-                    })
-                    .text(item.cuisine_name);
-                cuisineList.append(selectItem);
-            });
-        });
-    };
-
     // Get the user's latitude and longitude from the browser.
     const profileGeo = function(position) {
         $('input[name="latitude"]').val(position.coords.latitude);
@@ -50,33 +16,25 @@
     const geoError = function(error) {
         switch (error.code) {
             case error.PERMISSION_DENIED:
-                console.error('Location permission denied by user.');
+                console.log('Location permission denied by user.');
                 break;
             case error.POSITION_UNAVAILABLE:
-                console.error('Location position unavailable.');
+                console.log('Location position unavailable.');
                 break;
             case error.TIMEOUT:
-                console.error('Location request timed out.');
+                console.log('Location request timed out.');
                 break;
             case error.UNKNOWN_ERROR:
-                console.error('Location: Unknow error.');
+                console.log('Location: Unknow error.');
                 break;
         }
     };
-
-    $('.get-location').on('click', function() {
-        if ('geolocation' in navigator) {
-            navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
-        } else {
-            console.error('The browser does not support geolocation!');
-        }
-    });
 
     $('.update-location').on('click', function() {
         if ('geolocation' in navigator) {
             navigator.geolocation.getCurrentPosition(profileGeo, geoError);
         } else {
-            console.error('The browser does not support geolocation!');
+            console.log('The browser does not support geolocation!');
         }
     });
 
@@ -132,5 +90,33 @@
 
             return this.options.rangeValue;
         },
+    });
+
+    $('#nosh-me').on('click', function(event) {
+        event.preventDefault();
+
+        const token = document
+            .querySelector('meta[name="csrf-token"]')
+            .getAttribute('content');
+
+        const searchParams = {
+            radius: $('#radius-wheel').roundSlider('option', 'value'),
+            cuisines: $('.carousel-item.active').data('cuisine-id'),
+        };
+
+        $.ajax({
+            method: 'post',
+            url: '/search',
+            data: searchParams,
+            headers: {
+                'X-CSRF-Token': token,
+            },
+        }).done(function(data) {
+            // console.dir(data);
+            // data.forEach((item) => {
+            //     // Build Modal Content
+            // });
+            // $('#resultsModal').modal('show');
+        });
     });
 })(jQuery);

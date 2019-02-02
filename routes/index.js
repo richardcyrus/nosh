@@ -13,6 +13,7 @@ const db = require('../models');
 const config = require('../config/app-config');
 const Zomato = require('../lib/zomato');
 const zomato = new Zomato(config.zomato.userKey);
+const { get_icons, prepare_modal } = require('../lib/zomato-utils');
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
@@ -62,9 +63,9 @@ router.post(
             req.logIn(user, (err) => {
                 if (err) return next(err);
 
-                req.flash('success', {
-                    msg: 'Success! You are logged in.',
-                });
+                // req.flash('success', {
+                //     msg: 'Success! You are logged in.',
+                // });
                 res.redirect(req.session.returnTo || '/welcome');
             });
         })(req, res, next);
@@ -75,8 +76,7 @@ router.post(
 router.get('/logout', (req, res, next) => {
     req.logout();
     req.session.destroy((err) => {
-        if (err)
-            console.error('Failed to destroy the session during logout.', err);
+        if (err) return next(err);
 
         req.user = null;
         res.redirect('/');
@@ -332,16 +332,30 @@ router.get('/welcome', ensureLoggedIn('/login'), (req, res, next) => {
     // If the user has lat and lon in their profile, we pushed to the
     // session when they authenticated.
     if (req.session.lat && req.session.lon) {
+        // console.log('>>>!!! HAVE LOCATION INFO !!!<<<');
         zomato
             .cuisines({ lat: req.session.lat, lon: req.session.lon })
-            .then((cuisines) => {
-                console.dir(cuisines);
+            .then((results) => {
+                if (results) {
+                    // console.log('>>>!!! HAVE CUISINES !!!<<<');
 
-                res.render('search', {
-                    page: 'search-page',
-                    csrf_header: req.csrfToken(),
-                    cuisines: cuisines,
-                });
+                    const cuisines = get_icons(results);
+                    // console.dir(cuisines);
+
+                    res.render('search', {
+                        page: 'search-page',
+                        csrf_header: req.csrfToken(),
+                        cuisines: cuisines,
+                    });
+                } else {
+                    req.flash('errors', {
+                        msg: 'Failed to get the cuisine list!',
+                    });
+                    res.render('search', {
+                        page: 'search-page',
+                        csrf_header: req.csrfToken(),
+                    });
+                }
             })
             .catch((err) => {
                 res.render('search', {
@@ -352,6 +366,7 @@ router.get('/welcome', ensureLoggedIn('/login'), (req, res, next) => {
     } else {
         // Show the page with inputs for the Zomato Query. The user didn't
         // Provide their location during sign-up.
+        // console.log('>>>!!! NO LOCATION INFO !!!<<<');
         res.render('search', {
             page: 'search-page',
             csrf_header: req.csrfToken(),
@@ -359,58 +374,12 @@ router.get('/welcome', ensureLoggedIn('/login'), (req, res, next) => {
     }
 });
 
-/* POST /search/setup */
-/**
- * This is only necessary for testing. It allows to ask for location
- * data and update the logged-in user's profile record. May be able
- * to also remove the jQuery call to populate the drop down used in
- * testing.
- */
-router.post('/search/setup', (req, res, next) => {
-    let lat;
-    let lon;
-
-    if (req.session.lat && req.session.lon) {
-        lat = req.session.lat;
-        lon = req.session.lon;
-    } else {
-        lat = req.body.lat;
-        lon = req.body.lon;
-        req.session.lat = lat;
-        req.session.lon = lon;
-
-        let user;
-        db.User.findByPk(req.user.id)
-            .then((foundUser) => {
-                user = foundUser;
-
-                return db.Profile.create({
-                    latitude: lat,
-                    longitude: lon,
-                });
-            })
-            .then((profile) => {
-                user.setProfile(profile);
-            })
-            .then(() => next());
-    }
-
-    console.log(`lat: ${lat}, lon: ${lon}`);
-    console.log('Cookies: ', req.cookies);
-
-    console.log(req.user);
-
-    // zomato.cuisines({ lat: lat, lon: lon }).then((cuisines) => {
-    //     res.json(cuisines);
-    // });
-});
-
 /* POST /search */
-router.post('/search', ensureLoggedIn('/login'), (req, res, next) => {
+router.post('/search', (req, res, next) => {
     const data = {
-        cuisines: req.body['cuisine-select'],
-        radius: Math.floor(req.body['search-radius'] / 0.00062137),
-        count: 5,
+        cuisines: req.body.cuisines,
+        radius: Math.floor(req.body.radius / 0.00062137),
+        count: req.session.searchResults || 3,
     };
 
     if (req.session.lat && req.session.lon) {
@@ -418,10 +387,11 @@ router.post('/search', ensureLoggedIn('/login'), (req, res, next) => {
         data.lon = req.session.lon;
     }
 
-    console.dir(data);
+    // console.dir(data);
 
     zomato.search(data).then((results) => {
-        res.json(results);
+        // console.dir(results);
+        res.json(prepare_modal(results));
     });
 });
 
