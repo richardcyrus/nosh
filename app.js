@@ -13,8 +13,8 @@ const helmet = require('helmet');
 const exphbs = require('express-handlebars');
 const favicon = require('express-favicon');
 const session = require('express-session');
-const Sequelize = require('sequelize');
-const SequelizeStore = require('connect-session-sequelize')(session.Store);
+// const Sequelize = require('sequelize');
+// const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const cors = require('cors');
 const csrf = require('csurf');
 const passport = require('./config/passport');
@@ -39,7 +39,7 @@ app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+app.use(cookieParser(appConfig.session.secret));
 app.use(
     sassMiddleware({
         src: path.join(__dirname, 'public'),
@@ -50,24 +50,24 @@ app.use(
 );
 
 // Configure a session storage handler for express-session.
-const sessionStore = new SequelizeStore({
-    db: new Sequelize(null, null, null, {
-        dialect: 'sqlite',
-        storage: './session.sqlite',
-    }),
-    checkExpirationInterval: 15 * 60 * 1000,
-    expiration: 24 * 60 * 60 * 1000,
-});
+// const sessionStore = new SequelizeStore({
+//     db: new Sequelize(null, null, null, {
+//         dialect: 'sqlite',
+//         storage: './session.sqlite',
+//     }),
+//     checkExpirationInterval: 15 * 60 * 1000,
+//     expiration: 24 * 60 * 60 * 1000,
+// });
 
 const sessionOptions = {
     secret: appConfig.session.secret,
     resave: false,
     saveUninitialized: false,
-    store: sessionStore,
-    cookie: { maxAge: 86400 },
+    // store: sessionStore,
+    cookie: { maxAge: 24 * 60 * 60 * 1000 },
 };
 
-sessionStore.sync();
+// sessionStore.sync();
 
 if (app.get('env') === 'production') {
     app.set('trust proxy', 1);
