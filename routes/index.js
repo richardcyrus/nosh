@@ -254,6 +254,11 @@ router.post(
             displayName: req.body.displayName,
         };
 
+        if (req.body.longitude && req.body.latitude) {
+            req.session.lat = req.body.latitude;
+            req.session.lon = req.body.longitude;
+        }
+
         /**
          * Hints on how to make this work properly came from:
          * https://github.com/RobinBuschmann/sequelize-typescript/issues/309#issuecomment-367443345

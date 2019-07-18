@@ -32,6 +32,9 @@ const hbs = exphbs.create({
     extname: '.hbs',
 });
 app.engine('hbs', hbs.engine);
+if (app.get('env') === 'production') {
+    app.set('view cache', true);
+}
 app.set('view engine', 'hbs');
 
 app.use(helmet());
