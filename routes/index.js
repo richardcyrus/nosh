@@ -5,7 +5,7 @@
 
 const express = require('express');
 const router = express.Router();
-const { check, validationResult } = require('express-validator/check');
+const { check, validationResult } = require('express-validator');
 const passport = require('passport');
 const { ensureLoggedIn } = require('connect-ensure-login');
 const db = require('../models');
