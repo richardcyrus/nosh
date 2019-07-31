@@ -4,7 +4,7 @@ module.exports = {
             .query('SET FOREIGN_KEY_CHECKS = 0')
             .then(() => {
                 return queryInterface.createTable(
-                    'Users',
+                    'users',
                     {
                         id: {
                             type: Sequelize.INTEGER,

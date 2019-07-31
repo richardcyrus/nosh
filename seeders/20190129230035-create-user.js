@@ -9,8 +9,8 @@ const hash = bcrypt.hashSync(process.env.SEED_USER_PASSWORD, salt);
 const user = {
     provider: 'local',
     displayName: 'Jan Doe',
-    firstName: 'Jan',
     lastName: 'Doe',
+    firstName: 'Jan',
     email: 'jan.doe@example.com',
     password: hash,
     createdAt: new Date(),
@@ -19,6 +19,8 @@ const user = {
         radius: 3,
         searchResults: 3,
         gender: 'Female',
+        createdAt: new Date(),
+        updatedAt: new Date(),
     },
 };
 
