@@ -1,2 +1,7 @@
 .eslintrc.js
-main.js
+.idea
+.vscode
+.nyc_output
+coverage
+sequelize-meta.json
+package-lock.json
