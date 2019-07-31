@@ -26,7 +26,7 @@
                 console.log('Location request timed out.');
                 break;
             case error.UNKNOWN_ERROR:
-                console.log('Location: Unknow error.');
+                console.log('Location: Unknown error.');
                 break;
         }
     };

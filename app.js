@@ -52,7 +52,7 @@ if (process.env.JAWSDB_URL) {
 
 // Configure base session options.
 const sessionOptions = {
-    name: 'nosh.sid',
+    name: 'nosh.pid',
     secret: process.env.SESSION_SECRET,
     store: sessionStore,
     resave: false,
@@ -68,7 +68,7 @@ if (app.get('env') === 'production') {
 }
 
 // Create the session database tables if they're not there.
-sessionStore.sync();
+// sessionStore.sync();
 
 // view engine setup
 const hbs = exphbs.create({
