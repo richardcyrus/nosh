@@ -3,6 +3,7 @@
  * (c) 2019 Richard Cyrus, Teddy Johnson, Sara Minerva, Yobany Perez
  */
 
+require('dotenv').config();
 const path = require('path');
 
 module.exports = {

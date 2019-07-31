@@ -2,6 +2,15 @@
 <script src="/js/lib/popper.min.js"></script>
 <script src="/js/lib/bootstrap.min.js"></script>
 <script src="/js/lib/fontawesome/all.min.js"></script>
-<script src="/assets/lib/round-slider/roundslider.min.js"></script>
 <script src="/assets/js/main.js"></script>
-
+{{#if indexRoute}}
+<script src="/assets/js/front-page.js"></script>
+{{/if}}
+{{#if locationRoute}}
+<script src="/assets/js/location-api.js"></script>
+{{/if}}
+{{#if searchRoute}}
+<script src="/js/lib/bootbox.min.js"></script>
+<script src="/assets/lib/round-slider/roundslider.min.js"></script>
+<script src="/assets/js/app.js"></script>
+{{/if}}

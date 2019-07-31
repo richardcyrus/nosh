@@ -7,10 +7,16 @@ module.exports = (sequelize, DataTypes) => {
     const Profile = sequelize.define(
         'Profile',
         {
-            latitude: DataTypes.STRING,
-            longitude: DataTypes.STRING,
-            radius: DataTypes.INTEGER,
-            searchResults: DataTypes.INTEGER,
+            latitude: { type: DataTypes.STRING },
+            longitude: { type: DataTypes.STRING },
+            radius: {
+                type: DataTypes.INTEGER,
+                defaultValue: 3,
+            },
+            searchResults: {
+                type: DataTypes.INTEGER,
+                defaultValue: 3,
+            },
             gender: {
                 type: DataTypes.STRING,
                 allowNull: true,
@@ -20,10 +26,12 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: true,
             },
         },
-        {}
+        {
+            tableName: 'Profiles',
+            underscored: false,
+            freezeTableName: true,
+        }
     );
-    Profile.associate = function(models) {
-        // associations can be defined here
-    };
+
     return Profile;
 };
