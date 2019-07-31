@@ -1,0 +1,14 @@
+{
+    "ignore": [
+        ".git",
+        ".history",
+        ".idea",
+        ".vscode",
+        "node_modules/**/node_modules"
+    ],
+    "verbose": true,
+    "env": {
+        "NODE_ENV": "development"
+    },
+    "ext": "js json"
+}

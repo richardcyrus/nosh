@@ -6,12 +6,12 @@
         <div id="cuisine-slider" class="carousel slide" data-interval="false">
             <div class="carousel-inner">
                 {{#each cuisines}}
-                    <div class="carousel-item {{~#if @first}} active{{/if}}" data-cuisine-id="{{cuisine_id}}">
-                        <p class="cuisine"><i class="{{icon}} pe-5x"></i></p>
-                        <div class="carousel-caption d-none d-md-block">
-                            <p class="cuisine-name">{{cuisine_name}}</p>
-                        </div>
+                <div class="carousel-item {{~#if @first}} active{{/if}}" data-cuisine-id="{{cuisine_id}}">
+                    <p class="cuisine"><i class="{{icon}} pe-5x"></i></p>
+                    <div class="carousel-caption d-none d-md-block">
+                        <p class="cuisine-name">{{cuisine_name}}</p>
                     </div>
+                </div>
                 {{/each}}
             </div>
             <a class="carousel-control-prev" href="#cuisine-slider" role="button" data-slide="prev">
@@ -28,22 +28,8 @@
         <button id="nosh-me" class="btn btn-danger btn-lg" type="button" role="button">nosh me!</button>
     </div>
 </div>
-<div id="resultsModal" class="modal fade" role="dialog" aria-hidden="true" aria-labelledby="resultsModal" tabindex="-1">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Your Options</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div id="results-container" class="container-fluid">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
+<script type="text/javascript">
+    /* eslint-disable */
+    var startRadius = parseInt({{ user.Profile.radius }});
+    /* eslint-enable */
+</script>

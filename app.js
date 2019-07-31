@@ -3,28 +3,72 @@
  * (c) 2019 Richard Cyrus, Teddy Johnson, Sara Minerva, Yobany Perez
  */
 
-const createError = require('http-errors');
-const express = require('express');
-const path = require('path');
+const compression = require('compression');
 const cookieParser = require('cookie-parser');
-const logger = require('morgan');
-const sassMiddleware = require('node-sass-middleware');
-const helmet = require('helmet');
+const cors = require('cors');
+const createError = require('http-errors');
+const csrf = require('csurf');
 const exphbs = require('express-handlebars');
+const express = require('express');
 const favicon = require('express-favicon');
+const flash = require('express-flash');
+const helmet = require('helmet');
+const logger = require('morgan');
+const path = require('path');
+const sassMiddleware = require('node-sass-middleware');
 const session = require('express-session');
 const Sequelize = require('sequelize');
-const SequelizeStore = require('connect-session-sequelize')(session.Store);
-const cors = require('cors');
-const csrf = require('csurf');
+
+// eslint-disable-next-line no-unused-vars
+const debug = require('debug')('nosh:app');
+
+// Import the passport.js module and configuration.
 const passport = require('./config/passport');
-const flash = require('express-flash');
 
-const appConfig = require('./config/app-config');
+// Import the application routes.
+const routes = require('./routes');
 
-const indexRouter = require('./routes/index');
-
+// Create the Express Application
 const app = express();
+
+// Initialize Sequelize with session store.
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
+
+// Handle Heroku Production vs Development Environment.
+let sessionStore;
+if (process.env.JAWSDB_URL) {
+    sessionStore = new SequelizeStore({
+        db: new Sequelize(process.env.JAWSDB_URL, {
+            dialect: 'mysql',
+        }),
+    });
+} else {
+    sessionStore = new SequelizeStore({
+        db: new Sequelize(process.env.MYSQLDB_URL, {
+            dialect: 'mysql',
+        }),
+    });
+}
+
+// Configure base session options.
+const sessionOptions = {
+    name: 'nosh.sid',
+    secret: process.env.SESSION_SECRET,
+    store: sessionStore,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 24 * 60 * 60 * 1000 },
+};
+
+// Add production changes for session if necessary.
+if (process.env.NODE_ENV === 'production') {
+    sessionOptions.cookie.secure = true;
+    sessionOptions.proxy = true;
+    app.set('trust proxy', 1);
+}
+
+// Create the session database tables if they're not there.
+sessionStore.sync();
 
 // view engine setup
 const hbs = exphbs.create({
@@ -32,17 +76,21 @@ const hbs = exphbs.create({
     extname: '.hbs',
 });
 app.engine('hbs', hbs.engine);
-if (app.get('env') === 'production') {
+if (process.env.NODE_ENV === 'production') {
     app.set('view cache', true);
 }
 app.set('view engine', 'hbs');
 
+app.use(logger('dev'));
 app.use(helmet());
 app.use(cors());
-app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser(appConfig.session.secret));
+app.use(cookieParser(process.env.SESSION_SECRET));
+app.use(session(sessionOptions));
+// Use the session for csrf
+app.use(csrf({ cookie: false }));
+
 app.use(
     sassMiddleware({
         src: path.join(__dirname, 'public'),
@@ -52,56 +100,35 @@ app.use(
     })
 );
 
-let sessionStore;
-
-// Configure a session storage handler for express-session.
-if (process.env.JAWSDB_URL) {
-    sessionStore = new SequelizeStore({
-        db: new Sequelize(process.env.JAWSDB_URL, {
-            dialect: 'mysql',
-        }),
-        checkExpirationInterval: 15 * 60 * 1000,
-        expiration: 24 * 60 * 60 * 1000,
-    });
-} else {
-    sessionStore = new SequelizeStore({
-        db: new Sequelize(null, null, null, {
-            dialect: 'sqlite',
-            storage: './session.sqlite',
-        }),
-        checkExpirationInterval: 15 * 60 * 1000,
-        expiration: 24 * 60 * 60 * 1000,
-    });
-}
-
-const sessionOptions = {
-    secret: appConfig.session.secret,
-    resave: false,
-    saveUninitialized: false,
-    store: sessionStore,
-    cookie: { maxAge: 24 * 60 * 60 * 1000 },
-};
-
-sessionStore.sync();
-
-if (app.get('env') === 'production') {
-    app.set('trust proxy', 1);
-    sessionOptions.cookie.secure = true;
-    sessionOptions.proxy = true;
-}
-app.use(session(sessionOptions));
-
-app.use(csrf({ cookie: false }));
-
+// Initialize passport.js and setup session support.
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Add support for flash messages.
 app.use(flash());
 
+/**
+ * Register the user when a user is authenticated, and add key fields to
+ * the session.
+ *
+ * Grants access to the user object in the handlebars templates.
+ */
 app.use((req, res, next) => {
+    // This is for the templates.
     res.locals.user = req.user;
+
+    // This is for the session, This makes a single point for management.
+    if (req.user) {
+        req.session.latitude = req.user.Profile.latitude;
+        req.session.longitude = req.user.Profile.longitude;
+        req.session.radius = req.user.Profile.radius;
+        req.session.searchResults = req.user.Profile.searchResults;
+    }
+
+    // Call the next middleware function.
     next();
 });
+app.use(compression());
 
 // Set the site favicon
 app.use(favicon(path.join(__dirname, 'public/assets/images/nosh_n.png')));
@@ -123,6 +150,10 @@ app.use(
     express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js'))
 );
 app.use(
+    '/js/lib',
+    express.static(path.join(__dirname, 'node_modules/bootbox/dist'))
+);
+app.use(
     '/js/lib/fontawesome',
     express.static(
         path.join(__dirname, 'node_modules/@fortawesome/fontawesome-free/js')
@@ -137,8 +168,8 @@ app.use(
     express.static(path.join(__dirname, 'node_modules/round-slider/dist'))
 );
 
-// Process routes
-app.use('/', indexRouter);
+// Register the routes.
+app.use(routes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
