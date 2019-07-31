@@ -42,6 +42,13 @@ Object.keys(db).forEach((modelName) => {
     }
 });
 
+// From: https://stackoverflow.com/questions/34407193/using-sequelize-with-associations-and-scopes-with-includes-in-multiple-files/40786907#40786907
+Object.keys(db).forEach(function(modelName) {
+    if ('loadScopes' in db[modelName]) {
+        db[modelName].loadScopes(db);
+    }
+});
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

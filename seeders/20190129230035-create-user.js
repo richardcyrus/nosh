@@ -1,27 +1,37 @@
 require('dotenv').config();
 const bcrypt = require('bcrypt');
 
+const db = require('../models');
+
 const salt = bcrypt.genSaltSync(parseInt(process.env.SALT_WORK_FACTOR));
 const hash = bcrypt.hashSync(process.env.SEED_USER_PASSWORD, salt);
 
+const user = {
+    provider: 'local',
+    displayName: 'Jan Doe',
+    firstName: 'Jan',
+    lastName: 'Doe',
+    email: 'jan.doe@example.com',
+    password: hash,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    Profile: {
+        radius: 3,
+        searchResults: 3,
+        gender: 'Female',
+    },
+};
+
 module.exports = {
     up: (queryInterface, Sequelize) => {
-        return queryInterface.bulkInsert(
-            'Users',
-            [
+        return db.User.create(user, {
+            include: [
                 {
-                    provider: 'local',
-                    displayName: 'Jan Doe',
-                    firstName: 'Jan',
-                    lastName: 'Doe',
-                    email: 'jan.doe@example.com',
-                    password: hash,
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
+                    model: db.Profile,
+                    as: 'Profile',
                 },
             ],
-            {}
-        );
+        });
     },
 
     down: (queryInterface, Sequelize) => {

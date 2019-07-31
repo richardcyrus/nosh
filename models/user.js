@@ -4,7 +4,7 @@
  */
 
 const bcrypt = require('bcrypt');
-const appConfig = require('../config/app-config');
+const BCRYPT_SALT_WORK_FACTOR = parseInt(process.env.SALT_WORK_FACTOR);
 
 module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define(
@@ -73,6 +73,9 @@ module.exports = (sequelize, DataTypes) => {
             },
         },
         {
+            tableName: 'users',
+            underscored: false,
+            freezeTableName: true,
             indexes: [
                 { unique: true, fields: ['email'] },
                 { unique: true, fields: ['providerId'] },
@@ -95,7 +98,7 @@ module.exports = (sequelize, DataTypes) => {
         // findOrCreate.
         if (user.changed('password') && user.password !== 'external') {
             return bcrypt
-                .hash(user.password, appConfig.crypt.workFactor)
+                .hash(user.password, BCRYPT_SALT_WORK_FACTOR)
                 .then((hash) => {
                     user.password = hash;
                 })
@@ -106,7 +109,64 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     User.associate = function(models) {
-        User.belongsTo(models.Profile);
+        User.belongsTo(models.Profile, { onDelete: 'CASCADE' });
+    };
+
+    User.loadScopes = (models) => {
+        // Define the fields to include/exclude for `passport.deserializeUser`.
+        User.addScope('forDeserialize', {
+            attributes: {
+                exclude: [
+                    'providerId',
+                    'provider',
+                    'token',
+                    'password',
+                    'passwordResetToken',
+                    'passwordResetExpires',
+                ],
+            },
+            include: [
+                {
+                    model: models.Profile,
+                    as: 'Profile',
+                    attributes: [
+                        'latitude',
+                        'longitude',
+                        'radius',
+                        'searchResults',
+                        'gender',
+                        'photo',
+                    ],
+                },
+            ],
+        });
+
+        // Define the fields and models to include when processing a user login.
+        User.addScope('forLogin', {
+            include: [
+                {
+                    model: models.Profile,
+                    as: 'Profile',
+                    attributes: [
+                        'latitude',
+                        'longitude',
+                        'radius',
+                        'searchResults',
+                    ],
+                },
+            ],
+        });
+
+        // Include the Profile model. Used for register, delete,
+        // and save profile.
+        User.addScope('withProfile', {
+            include: [
+                {
+                    model: models.Profile,
+                    as: 'Profile',
+                },
+            ],
+        });
     };
 
     return User;
