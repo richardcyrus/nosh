@@ -61,7 +61,7 @@ const sessionOptions = {
 };
 
 // Add production changes for session if necessary.
-if (process.env.NODE_ENV === 'production') {
+if (app.get('env') === 'production') {
     sessionOptions.cookie.secure = true;
     sessionOptions.proxy = true;
     app.set('trust proxy', 1);
@@ -76,7 +76,7 @@ const hbs = exphbs.create({
     extname: '.hbs',
 });
 app.engine('hbs', hbs.engine);
-if (process.env.NODE_ENV === 'production') {
+if (app.get('env') === 'production') {
     app.set('view cache', true);
 }
 app.set('view engine', 'hbs');
@@ -96,7 +96,7 @@ app.use(
         src: path.join(__dirname, 'public'),
         dest: path.join(__dirname, 'public'),
         indentedSyntax: false,
-        sourceMap: true,
+        sourceMap: false,
     })
 );
 
@@ -106,29 +106,6 @@ app.use(passport.session());
 
 // Add support for flash messages.
 app.use(flash());
-
-/**
- * Register the user when a user is authenticated, and add key fields to
- * the session.
- *
- * Grants access to the user object in the handlebars templates.
- */
-app.use((req, res, next) => {
-    // This is for the templates.
-    res.locals.user = req.user;
-
-    // This is for the session, This makes a single point for management.
-    if (req.user) {
-        req.session.latitude = req.user.Profile.latitude;
-        req.session.longitude = req.user.Profile.longitude;
-        req.session.radius = req.user.Profile.radius;
-        req.session.searchResults = req.user.Profile.searchResults;
-    }
-
-    // Call the next middleware function.
-    next();
-});
-app.use(compression());
 
 // Set the site favicon
 app.use(favicon(path.join(__dirname, 'public/assets/images/nosh_n.png')));
@@ -167,6 +144,29 @@ app.use(
     '/assets/lib/round-slider',
     express.static(path.join(__dirname, 'node_modules/round-slider/dist'))
 );
+app.use(compression());
+
+/**
+ * Register the user when a user is authenticated, and add key fields to
+ * the session.
+ *
+ * Grants access to the user object in the handlebars templates.
+ */
+app.use((req, res, next) => {
+    // This is for the templates.
+    res.locals.user = req.user;
+
+    // This is for the session, This makes a single point for management.
+    if (req.user) {
+        req.session.latitude = req.user.Profile.latitude;
+        req.session.longitude = req.user.Profile.longitude;
+        req.session.radius = req.user.Profile.radius;
+        req.session.searchResults = req.user.Profile.searchResults;
+    }
+
+    // Call the next middleware function.
+    next();
+});
 
 // Register the routes.
 app.use(routes);

@@ -6259,7 +6259,10 @@ body {
 .profile-page {
   min-height: 100vh; }
 
-.login-page h3, .login-page h2, .login-page label, .login-page button,
+.login-page h3,
+.login-page h2,
+.login-page label,
+.login-page button,
 .signup-page h3,
 .signup-page h2,
 .signup-page label,
@@ -6375,5 +6378,3 @@ body {
 
 .modal-title {
   color: #ff4d00; }
-
-/*# sourceMappingURL=style.css.map */

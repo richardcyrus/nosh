@@ -7,25 +7,6 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const db = require('../models');
 
-passport.serializeUser((user, done) => {
-    done(null, user.id);
-});
-
-passport.deserializeUser((id, done) => {
-    db.User.scope('forDeserialize')
-        .findByPk(id)
-        .then((user) => {
-            if (user) {
-                done(null, user.get({ plain: true }));
-            } else {
-                done(null, false);
-            }
-        })
-        .catch((err) => {
-            done(err, false);
-        });
-});
-
 passport.use(
     'local',
     new LocalStrategy(
@@ -103,5 +84,24 @@ passport.use(
         }
     )
 );
+
+passport.serializeUser((user, done) => {
+    done(null, user.id);
+});
+
+passport.deserializeUser((id, done) => {
+    db.User.scope('forDeserialize')
+        .findByPk(id)
+        .then((user) => {
+            if (user) {
+                done(null, user.get({ plain: true }));
+            } else {
+                done(null, false);
+            }
+        })
+        .catch((err) => {
+            done(err, false);
+        });
+});
 
 module.exports = passport;
