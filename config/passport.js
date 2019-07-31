@@ -5,7 +5,6 @@
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-
 const db = require('../models');
 
 passport.serializeUser((user, done) => {
@@ -13,33 +12,8 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((id, done) => {
-    db.User.findByPk(id, {
-        attributes: {
-            exclude: [
-                'providerId',
-                'provider',
-                'token',
-                'password',
-                'passwordResetToken',
-                'passwordResetExpires',
-            ],
-        },
-        include: [
-            {
-                model: db.Profile,
-                as: 'Profile',
-                where: { ProfileId: db.Sequelize.col('Profile.id') },
-                attributes: [
-                    'latitude',
-                    'longitude',
-                    'radius',
-                    'searchResults',
-                    'gender',
-                    'photo',
-                ],
-            },
-        ],
-    })
+    db.User.scope('forDeserialize')
+        .findByPk(id)
         .then((user) => {
             if (user) {
                 done(null, user.get({ plain: true }));
@@ -48,7 +22,7 @@ passport.deserializeUser((id, done) => {
             }
         })
         .catch((err) => {
-            done(err);
+            done(err, false);
         });
 });
 
@@ -57,21 +31,8 @@ passport.use(
     new LocalStrategy(
         { usernameField: 'email', passReqToCallback: true },
         (req, email, password, done) => {
-            db.User.findOne({
-                where: { email: email },
-                include: [
-                    {
-                        model: db.Profile,
-                        where: { ProfileId: db.Sequelize.col('Profile.id') },
-                        attributes: [
-                            'latitude',
-                            'longitude',
-                            'radius',
-                            'searchResults',
-                        ],
-                    },
-                ],
-            })
+            db.User.scope('forLogin')
+                .findOne({ where: { email: email } })
                 .then((user) => {
                     if (!user) {
                         return done(null, false, {
@@ -79,39 +40,31 @@ passport.use(
                         });
                     }
 
-                    return user
-                        .validPassword(password)
-                        .then((isMatch) => {
-                            if (!isMatch) {
-                                return done(null, false, {
-                                    msg: 'Incorrect username or password.',
-                                });
-                            } else {
-                                req.session.lat = user.Profile.latitude;
-                                req.session.lon = user.Profile.longitude;
-                                return done(null, user);
-                            }
-                        })
-                        .catch((err) => {
-                            return done(err);
-                        });
+                    return user.validPassword(password).then((isMatch) => {
+                        if (!isMatch) {
+                            return done(null, false, {
+                                msg: 'Incorrect username or password.',
+                            });
+                        } else {
+                            return done(null, user);
+                        }
+                    });
                 })
                 .catch((err) => {
-                    return done(err);
+                    return done(err, false);
                 });
         }
     )
 );
 
+// Note: This doesn't work with scopes. Must add the include.
 passport.use(
     'register',
     new LocalStrategy(
         { usernameField: 'email', passReqToCallback: true },
         (req, email, password, done) => {
             db.User.findOrCreate({
-                where: {
-                    email: req.body.email.toLowerCase(),
-                },
+                where: { email: req.body.email.toLowerCase() },
                 defaults: {
                     lastName: req.body.lastName,
                     firstName: req.body.firstName,
@@ -119,7 +72,19 @@ passport.use(
                     email: req.body.email,
                     password: password,
                     provider: 'local',
+                    Profile: {
+                        latitude: req.body.latitude,
+                        longitude: req.body.longitude,
+                        radius: 3,
+                        searchResults: 3,
+                    },
                 },
+                include: [
+                    {
+                        model: db.Profile,
+                        as: 'Profile',
+                    },
+                ],
             })
                 .spread((user, created) => {
                     if (user && !created) {
@@ -133,7 +98,7 @@ passport.use(
                     }
                 })
                 .catch((err) => {
-                    return done(err);
+                    return done(err, false);
                 });
         }
     )
