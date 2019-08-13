@@ -4,7 +4,7 @@ module.exports = {
             .query('SET FOREIGN_KEY_CHECKS = 0')
             .then(() => {
                 return queryInterface.createTable(
-                    'Profiles',
+                    'profiles',
                     {
                         id: {
                             type: Sequelize.INTEGER,
@@ -14,15 +14,19 @@ module.exports = {
                         },
                         latitude: {
                             type: Sequelize.STRING,
+                            allowNull: true,
                         },
                         longitude: {
                             type: Sequelize.STRING,
+                            allowNull: true,
                         },
                         radius: {
                             type: Sequelize.INTEGER,
+                            defaultValue: 3,
                         },
                         searchResults: {
                             type: Sequelize.INTEGER,
+                            defaultValue: 3,
                         },
                         gender: {
                             type: Sequelize.STRING,
@@ -58,7 +62,7 @@ module.exports = {
         return queryInterface.sequelize
             .query('SET FOREIGN_KEY_CHECKS = 0')
             .then(() => {
-                return queryInterface.dropTable('Profiles');
+                return queryInterface.dropTable('profiles');
             })
             .then(() => {
                 return queryInterface.sequelize.query(

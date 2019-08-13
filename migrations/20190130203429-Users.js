@@ -4,7 +4,7 @@ module.exports = {
             .query('SET FOREIGN_KEY_CHECKS = 0')
             .then(() => {
                 return queryInterface.createTable(
-                    'Users',
+                    'users',
                     {
                         id: {
                             type: Sequelize.INTEGER,
@@ -81,7 +81,6 @@ module.exports = {
                                 key: 'id',
                             },
                             onDelete: 'CASCADE',
-                            onUpdate: 'CASCADE',
                         },
                         createdAt: {
                             type: Sequelize.DATE,
@@ -100,17 +99,17 @@ module.exports = {
                 );
             })
             .then(() => {
-                return queryInterface.addIndex('Users', ['email'], {
+                return queryInterface.addIndex('users', ['email'], {
                     indicesType: 'UNIQUE',
                 });
             })
             .then(() => {
-                return queryInterface.addIndex('Users', ['providerId'], {
+                return queryInterface.addIndex('users', ['providerId'], {
                     indicesType: 'UNIQUE',
                 });
             })
             .then(() => {
-                return queryInterface.addIndex('Users', ['displayName']);
+                return queryInterface.addIndex('users', ['displayName']);
             })
             .then(() => {
                 return queryInterface.sequelize.query(
@@ -122,7 +121,7 @@ module.exports = {
         return queryInterface.sequelize
             .query('SET FOREIGN_KEY_CHECKS = 0')
             .then(() => {
-                return queryInterface.dropTable('Users');
+                return queryInterface.dropTable('users');
             })
             .then(() => {
                 return queryInterface.sequelize.query(

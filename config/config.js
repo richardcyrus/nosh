@@ -33,19 +33,5 @@ module.exports = {
     production: {
         use_env_variable: 'JAWSDB_URL',
         dialect: 'mysql',
-        charset: 'utf8mb4',
-        dialectOptions: {
-            collate: 'utf8mb4_unicode_520_ci',
-            supportBigNumbers: true,
-        },
-        define: {
-            underscored: false,
-            freezeTableName: true,
-            charset: 'utf8mb4',
-            dialectOptions: {
-                collate: 'utf8mb4_unicode_520_ci',
-            },
-            timestamps: true,
-        },
     },
 };

@@ -1,6 +1,6 @@
 {
     "name": "nosh",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "description": "some things are better shared",
     "private": true,
     "scripts": {
@@ -50,10 +50,12 @@
         "express-validator": "6.1.1",
         "helmet": "3.20.0",
         "http-errors": "1.7.3",
+        "if-env": "1.0.4",
         "jquery": "3.4.1",
         "morgan": "1.9.1",
         "mysql2": "1.6.5",
         "node-sass-middleware": "0.11.0",
+        "nodemon": "1.19.1",
         "passport": "0.4.0",
         "passport-local": "1.0.0",
         "popper.js": "1.15.0",
@@ -74,9 +76,7 @@
         "eslint-plugin-prettier": "3.1.0",
         "eslint-plugin-promise": "4.2.1",
         "eslint-plugin-standard": "4.0.0",
-        "if-env": "1.0.4",
         "mocha": "6.2.0",
-        "nodemon": "1.19.1",
         "prettier": "1.18.2",
         "sequelize-cli": "5.5.0"
     }

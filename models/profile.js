@@ -7,8 +7,8 @@ module.exports = (sequelize, DataTypes) => {
     const Profile = sequelize.define(
         'Profile',
         {
-            latitude: { type: DataTypes.STRING },
-            longitude: { type: DataTypes.STRING },
+            latitude: { type: DataTypes.STRING, allowNull: true },
+            longitude: { type: DataTypes.STRING, allowNull: true },
             radius: {
                 type: DataTypes.INTEGER,
                 defaultValue: 3,
@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
             },
         },
         {
-            tableName: 'Profiles',
+            tableName: 'profiles',
             underscored: false,
             freezeTableName: true,
         }
