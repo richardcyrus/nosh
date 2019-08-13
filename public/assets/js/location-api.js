@@ -42,7 +42,7 @@
     };
 
     // Ask for the user's Browser location coordinates on the sign-up page.
-    $('.signup-page').ready(askLocation);
+    $('.signup-page').on('focus','#firstName', askLocation);
 
     // Ask for the user's Browser location coordinates on the profile page.
     // This is triggered when they click the location button.
