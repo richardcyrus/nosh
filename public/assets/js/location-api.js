@@ -6,15 +6,15 @@
 /* global jQuery */
 /* eslint-disable */
 
-(function($) {
+(function ($) {
     // Save the user's Browser location data.
-    const profileGeo = function(position) {
+    const profileGeo = function (position) {
         $('input[name="latitude"]').val(position.coords.latitude);
         $('input[name="longitude"]').val(position.coords.longitude);
     };
 
     // Error logging for the Browser location request.
-    const geoError = function(error) {
+    const geoError = function (error) {
         switch (error.code) {
             case error.PERMISSION_DENIED:
                 console.log('Location permission denied by user.');
@@ -33,7 +33,7 @@
 
     // Get the location data. If first request, the user will see a browser
     // message asking to approve the location access.
-    const askLocation = function() {
+    const askLocation = function () {
         if ('geolocation' in navigator) {
             navigator.geolocation.getCurrentPosition(profileGeo, geoError);
         } else {
@@ -42,7 +42,7 @@
     };
 
     // Ask for the user's Browser location coordinates on the sign-up page.
-    $('.signup-page').on('focus','#firstName', askLocation);
+    $('.signup-page').on('focus', '#firstName', askLocation);
 
     // Ask for the user's Browser location coordinates on the profile page.
     // This is triggered when they click the location button.

@@ -6,7 +6,7 @@
 /* global jQuery, bootbox */
 /* eslint-disable */
 
-(function($) {
+(function ($) {
     /* eslint-disable-next-line strict */
     'use strict';
 
@@ -32,7 +32,7 @@
         max: 48,
         step: 3,
         handleSize: '+20',
-        tooltipFormat: function(e) {
+        tooltipFormat: function (e) {
             const handle = this._handles().html(
                 '<div class="inner-tooltip"></div>'
             );
@@ -138,7 +138,7 @@
                         '<span class="fas fa-times"></span>&nbsp;&nbsp;Close',
                     /* eslint-enable max-len */
                     className: 'btn-outline-danger',
-                    callback: function() {
+                    callback: function () {
                         bootbox.hideAll();
                     },
                 },

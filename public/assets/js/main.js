@@ -6,16 +6,16 @@
 /* global jQuery */
 /* eslint-disable */
 
-(function($) {
+(function ($) {
     // Bootstrap tooltip and alert globals.
     $('[data-toggle="tooltip"]').tooltip();
 
     // Enable alerts that close on their own.
-    $('.alert[data-auto-dismiss]').each(function(index, element) {
+    $('.alert[data-auto-dismiss]').each(function (index, element) {
         const $element = $(element);
         const timeout = $element.data('auto-dismiss') || 5000;
 
-        setTimeout(function() {
+        setTimeout(function () {
             $element.alert('close');
         }, timeout);
     });

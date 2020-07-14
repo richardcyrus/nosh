@@ -6,13 +6,13 @@
 /* global jQuery */
 /* eslint-disable */
 
-(function($) {
+(function ($) {
     // Front Page scroll effect for the about button.
-    $(window).scroll(function() {
+    $(window).scroll(function () {
         $('.mainTitle').css('opacity', 1 - $(window).scrollTop() / 250);
     });
 
-    $('.about-arrow').on('click', function(event) {
+    $('.about-arrow').on('click', function (event) {
         event.preventDefault();
         $('html,body').animate(
             {

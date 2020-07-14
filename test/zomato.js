@@ -11,8 +11,8 @@ chai.should();
 const apiKey = process.env.ZOMATO_API_KEY;
 const zomato = new Zomato(apiKey);
 
-describe('.categories()', function() {
-    it('should return an array of categories', function() {
+describe('.categories()', function () {
+    it('should return an array of categories', function () {
         return zomato
             .categories()
             .should.be.fulfilled.should.eventually.be.an('array')
@@ -20,14 +20,14 @@ describe('.categories()', function() {
     });
 });
 
-describe('.cities(params)', function() {
-    it('should return no location suggestions with missing params', function() {
+describe('.cities(params)', function () {
+    it('should return no location suggestions with missing params', function () {
         return zomato
             .cities({})
             .should.be.fulfilled.should.eventually.be.an('array')
             .should.eventually.have.length(0);
     });
-    it('should return a location suggestion when given lat and lon', function() {
+    it('should return a location suggestion when given lat and lon', function () {
         return zomato
             .cities({ lat: 35.212587, lon: -80.813916 })
             .should.be.fulfilled.should.eventually.be.an('array')
@@ -35,13 +35,13 @@ describe('.cities(params)', function() {
     });
 });
 
-describe('.collections(params)', function() {
-    it('should be rejected with missing city_id or coordinates params', function() {
+describe('.collections(params)', function () {
+    it('should be rejected with missing city_id or coordinates params', function () {
         return zomato
             .collections({})
             .should.be.rejectedWith('Request failed with status code 400');
     });
-    it('should returns collections for the given location', function() {
+    it('should returns collections for the given location', function () {
         return zomato
             .collections({
                 lat: 19.0895595,
@@ -52,13 +52,13 @@ describe('.collections(params)', function() {
     });
 });
 
-describe('.cuisines(params)', function() {
-    it('should be rejected with missing city_id or coordinates params', function() {
+describe('.cuisines(params)', function () {
+    it('should be rejected with missing city_id or coordinates params', function () {
         return zomato
             .cuisines({})
             .should.be.rejectedWith('Request failed with status code 400');
     });
-    it('should return cuisines for the given location', function() {
+    it('should return cuisines for the given location', function () {
         return zomato
             .cuisines({
                 lat: 19.0895595,
@@ -68,13 +68,13 @@ describe('.cuisines(params)', function() {
     });
 });
 
-describe('.establishments(params)', function() {
-    it('should be rejected with missing city_id or coordinates params', function() {
+describe('.establishments(params)', function () {
+    it('should be rejected with missing city_id or coordinates params', function () {
         return zomato
             .establishments({})
             .should.be.rejectedWith('Request failed with status code 400');
     });
-    it('should return establishments for the given location', function() {
+    it('should return establishments for the given location', function () {
         return zomato
             .establishments({
                 lat: 19.0895595,
@@ -96,8 +96,8 @@ describe('.establishments(params)', function() {
 //   })
 // })
 
-describe('.locations(params)', function() {
-    it("should return with one location suggestion when query is 'Mumbai'", function() {
+describe('.locations(params)', function () {
+    it("should return with one location suggestion when query is 'Mumbai'", function () {
         return zomato
             .locations({
                 query: 'Mumbai',
@@ -119,8 +119,8 @@ describe('.locations(params)', function() {
 //   })
 // })
 
-describe('.restaurant(params)', function() {
-    it('should return with data for the given params', function() {
+describe('.restaurant(params)', function () {
+    it('should return with data for the given params', function () {
         return zomato
             .restaurant({ res_id: 34383 })
             .should.be.fulfilled.should.eventually.be.an('object')
@@ -128,21 +128,21 @@ describe('.restaurant(params)', function() {
     });
 });
 
-describe('.dailyMenu(params)', function() {
-    it('should be rejected for the given params', function() {
+describe('.dailyMenu(params)', function () {
+    it('should be rejected for the given params', function () {
         return zomato
             .dailymenu({ res_id: 34383 })
             .should.be.rejectedWith('Request failed with status code 400');
     });
-    it('should return the dailymenu for the given restaurant id', function() {
+    it('should return the dailymenu for the given restaurant id', function () {
         return zomato
             .dailymenu({ res_id: 16507902 })
             .should.be.fulfilled.should.eventually.be.an('array');
     });
 });
 
-describe('.reviews(params)', function() {
-    it('should return with reviews list with the given params', function() {
+describe('.reviews(params)', function () {
+    it('should return with reviews list with the given params', function () {
         return zomato
             .reviews({
                 res_id: 34383,
@@ -152,8 +152,8 @@ describe('.reviews(params)', function() {
     });
 });
 
-describe('.search(params)', function() {
-    it('should return with list of restaurants for the given params', function() {
+describe('.search(params)', function () {
+    it('should return with list of restaurants for the given params', function () {
         return zomato
             .search({
                 q: 'Leopold Cafe & Bar',
