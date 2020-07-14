@@ -3,9 +3,12 @@
  * (c) 2019 Richard Cyrus, Teddy Johnson, Sara Minerva, Yobany Perez
  */
 
+const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
-    const Profile = sequelize.define(
-        'Profile',
+    class Profile extends Model {}
+
+    Profile.init(
         {
             latitude: { type: DataTypes.STRING, allowNull: true },
             longitude: { type: DataTypes.STRING, allowNull: true },
@@ -27,9 +30,10 @@ module.exports = (sequelize, DataTypes) => {
             },
         },
         {
+            sequelize,
+            modelName: 'Profile',
             tableName: 'profiles',
             underscored: false,
-            freezeTableName: true,
         }
     );
 

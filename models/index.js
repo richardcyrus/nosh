@@ -8,7 +8,7 @@ const path = require('path');
 const Sequelize = require('sequelize');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
-const config = require(path.join(__dirname, '/../config/config.js'))[env];
+const config = require(path.join(__dirname, '..', 'config', 'config.js'))[env];
 const db = {};
 
 let sequelize;
@@ -32,7 +32,10 @@ fs.readdirSync(__dirname)
         );
     })
     .forEach((file) => {
-        const model = sequelize.import(path.join(__dirname, file));
+        const model = require(path.join(__dirname, file))(
+            sequelize,
+            Sequelize.DataTypes
+        );
         db[model.name] = model;
     });
 
@@ -43,8 +46,8 @@ Object.keys(db).forEach((modelName) => {
 });
 
 // From: https://stackoverflow.com/questions/34407193/using-sequelize-with-associations-and-scopes-with-includes-in-multiple-files/40786907#40786907
-Object.keys(db).forEach(function(modelName) {
-    if ('loadScopes' in db[modelName]) {
+Object.keys(db).forEach((modelName) => {
+    if (db[modelName].loadScopes) {
         db[modelName].loadScopes(db);
     }
 });

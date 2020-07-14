@@ -6,9 +6,73 @@
 const bcrypt = require('bcrypt');
 const BCRYPT_SALT_WORK_FACTOR = parseInt(process.env.SALT_WORK_FACTOR);
 
+const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
-    const User = sequelize.define(
-        'User',
+    class User extends Model {
+        static associate(models) {
+            User.belongsTo(models.Profile, { onDelete: 'CASCADE' });
+        }
+
+        static loadScopes(models) {
+            // Define the fields to include/exclude for `passport.deserializeUser`.
+            User.addScope('forDeserialize', {
+                attributes: {
+                    exclude: [
+                        'providerId',
+                        'provider',
+                        'token',
+                        'password',
+                        'passwordResetToken',
+                        'passwordResetExpires',
+                    ],
+                },
+                include: [
+                    {
+                        model: models.Profile,
+                        as: 'Profile',
+                        attributes: [
+                            'latitude',
+                            'longitude',
+                            'radius',
+                            'searchResults',
+                            'gender',
+                            'photo',
+                        ],
+                    },
+                ],
+            });
+
+            // Define the fields and models to include when processing a user login.
+            User.addScope('forLogin', {
+                include: [
+                    {
+                        model: models.Profile,
+                        as: 'Profile',
+                        attributes: [
+                            'latitude',
+                            'longitude',
+                            'radius',
+                            'searchResults',
+                        ],
+                    },
+                ],
+            });
+
+            // Include the Profile model. Used for register, delete,
+            // and save profile.
+            User.addScope('withProfile', {
+                include: [
+                    {
+                        model: models.Profile,
+                        as: 'Profile',
+                    },
+                ],
+            });
+        }
+    }
+
+    User.init(
         {
             providerId: {
                 type: DataTypes.STRING,
@@ -73,9 +137,10 @@ module.exports = (sequelize, DataTypes) => {
             },
         },
         {
+            sequelize,
+            modelName: 'User',
             tableName: 'users',
             underscored: false,
-            freezeTableName: true,
             indexes: [
                 { unique: true, fields: ['email'] },
                 { unique: true, fields: ['providerId'] },
@@ -84,7 +149,7 @@ module.exports = (sequelize, DataTypes) => {
         }
     );
 
-    User.prototype.validPassword = function(password) {
+    User.prototype.validPassword = function (password) {
         // This returns a promise. The bcrypt recommendation for server
         // side logic is to not use the Sync versions of the methods
         // so that we don't block when calculating the hash.
@@ -107,67 +172,6 @@ module.exports = (sequelize, DataTypes) => {
                 });
         }
     });
-
-    User.associate = function(models) {
-        User.belongsTo(models.Profile, { onDelete: 'CASCADE' });
-    };
-
-    User.loadScopes = (models) => {
-        // Define the fields to include/exclude for `passport.deserializeUser`.
-        User.addScope('forDeserialize', {
-            attributes: {
-                exclude: [
-                    'providerId',
-                    'provider',
-                    'token',
-                    'password',
-                    'passwordResetToken',
-                    'passwordResetExpires',
-                ],
-            },
-            include: [
-                {
-                    model: models.Profile,
-                    as: 'Profile',
-                    attributes: [
-                        'latitude',
-                        'longitude',
-                        'radius',
-                        'searchResults',
-                        'gender',
-                        'photo',
-                    ],
-                },
-            ],
-        });
-
-        // Define the fields and models to include when processing a user login.
-        User.addScope('forLogin', {
-            include: [
-                {
-                    model: models.Profile,
-                    as: 'Profile',
-                    attributes: [
-                        'latitude',
-                        'longitude',
-                        'radius',
-                        'searchResults',
-                    ],
-                },
-            ],
-        });
-
-        // Include the Profile model. Used for register, delete,
-        // and save profile.
-        User.addScope('withProfile', {
-            include: [
-                {
-                    model: models.Profile,
-                    as: 'Profile',
-                },
-            ],
-        });
-    };
 
     return User;
 };
