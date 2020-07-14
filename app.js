@@ -83,6 +83,7 @@ app.set('view engine', 'hbs');
 
 app.use(logger('dev'));
 app.use(helmet());
+app.use(compression());
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -144,7 +145,6 @@ app.use(
     '/assets/lib/round-slider',
     express.static(path.join(__dirname, 'node_modules/round-slider/dist'))
 );
-app.use(compression());
 
 /**
  * Register the user when a user is authenticated, and add key fields to
@@ -172,12 +172,12 @@ app.use((req, res, next) => {
 app.use(routes);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(functon (rq, res, next) {
     next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(functon (er, req, res, next) {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
