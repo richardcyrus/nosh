@@ -33,6 +33,16 @@ Nosh
 
 ![nosh logo](public/assets/images/nosh_logo_tagline-01.svg)
 
+## Screenshots
+
+![Home](screenshots/desktop-home.png)
+![About](screenshots/desktop-about.png)
+![Register](screenshots/desktop-register.png)
+![Login](screenshots/desktop-login.png)
+![Profile](screenshots/desktop-profile.png)
+![Search](screenshots/desktop-search.png)
+![Search Results](screenshots/desktop-search-results.png)
+
 ## The Team
 
 ### Richard Cyrus
