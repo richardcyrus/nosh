@@ -20,12 +20,12 @@ Nosh
 
 -   Color palette chosen because orange & red stimulate appetite
 
-    -   ![#ffc27a](https://placehold.it/15/ffc27a/000000?text=+) `#ffc27a`
-    -   ![#ff9015](https://placehold.it/15/ff9015/000000?text=+) `#ff9015`
-    -   ![#ff4d00](https://placehold.it/15/ff4d00/000000?text=+) `#ff4d00`
-    -   ![#d7282f](https://placehold.it/15/d7282f/000000?text=+) `#d7282f`
-    -   ![#aada91](https://placehold.it/15/aada91/000000?text=+) `#aada91`
-    -   ![#009d4f](https://placehold.it/15/009d4f/000000?text=+) `#009d4f`
+    -   ![#ffc27a](http://placehold.it/15/ffc27a/000000?text=+) `#ffc27a`
+    -   ![#ff9015](http://placehold.it/15/ff9015/000000?text=+) `#ff9015`
+    -   ![#ff4d00](http://placehold.it/15/ff4d00/000000?text=+) `#ff4d00`
+    -   ![#d7282f](http://placehold.it/15/d7282f/000000?text=+) `#d7282f`
+    -   ![#aada91](http://placehold.it/15/aada91/000000?text=+) `#aada91`
+    -   ![#009d4f](http://placehold.it/15/009d4f/000000?text=+) `#009d4f`
 
 -   Fonts are sans-serif and rounded to denote a friendly and casual feel
 -   Fonts used: Poppins/Cavet Brush/Moderna/Muli
