@@ -65,7 +65,7 @@ body {
     background-color: rgb(246, 121, 16);
     text-align: center;
     margin: $jumbotron-padding 0 0;
-    padding: ($jumbotron-padding * 2) ($jumbotron-padding/2);
+    padding: ($jumbotron-padding * 2) calc($jumbotron-padding/2);
     height: 22rem;
 }
 
@@ -157,7 +157,7 @@ body {
 }
 
 .card-link {
-    @include hover {
+    &:hover {
         text-decoration: none;
     }
 

@@ -7,7 +7,7 @@ const compression = require('compression');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const createError = require('http-errors');
-const csrf = require('csurf');
+const csrf = require('@dr.pogodin/csurf');
 const exphbs = require('express-handlebars');
 const express = require('express');
 const favicon = require('express-favicon');
@@ -15,7 +15,7 @@ const flash = require('express-flash');
 const helmet = require('helmet');
 const logger = require('morgan');
 const path = require('path');
-const sassMiddleware = require('node-sass-middleware');
+const sassMiddleware = require('express-dart-sass');
 const session = require('express-session');
 const Sequelize = require('sequelize');
 
@@ -68,7 +68,7 @@ if (app.get('env') === 'production') {
 }
 
 // Create the session database tables if they're not there.
-// sessionStore.sync();
+sessionStore.sync();
 
 // view engine setup
 const hbs = exphbs.create({
@@ -97,7 +97,6 @@ app.use(
         src: path.join(__dirname, 'public'),
         dest: path.join(__dirname, 'public'),
         indentedSyntax: false,
-        sourceMap: false,
     })
 );
 
@@ -121,7 +120,7 @@ app.use(
 );
 app.use(
     '/js/lib',
-    express.static(path.join(__dirname, 'node_modules/popper.js/dist/umd'))
+    express.static(path.join(__dirname, 'node_modules/@popperjs/core/dist/umd'))
 );
 app.use(
     '/js/lib',
