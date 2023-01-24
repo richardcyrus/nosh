@@ -1,7 +1,7 @@
-// Full Bootstrap
-@import 'node_modules/bootstrap/scss/bootstrap';
-
 // Bootstrap overrides
 @import 'theme/variables';
+
+// Full Bootstrap
+@import 'node_modules/bootstrap/scss/bootstrap';
 
 @import 'theme/default';
