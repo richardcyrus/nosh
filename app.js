@@ -37,9 +37,9 @@ const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
 // Handle Heroku Production vs Development Environment.
 let sessionStore;
-if (process.env.JAWSDB_URL) {
+if (process.env.MYSQL_URL) {
     sessionStore = new SequelizeStore({
-        db: new Sequelize(process.env.JAWSDB_URL, {
+        db: new Sequelize(process.env.MYSQL_URL, {
             dialect: 'mysql',
         }),
     });
