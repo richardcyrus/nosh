@@ -69,6 +69,7 @@ module.exports = {
                     csrf_header: req.csrfToken(),
                     cuisines: cuisines,
                     searchRoute: true,
+                    nonce: res.locals.nonce,
                 });
             }
         } else {

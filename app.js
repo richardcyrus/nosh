@@ -16,8 +16,9 @@ const helmet = require('helmet');
 const logger = require('morgan');
 const path = require('path');
 const sassMiddleware = require('express-dart-sass');
-const session = require('express-session');
 const Sequelize = require('sequelize');
+const session = require('express-session');
+const uuid = require('uuid');
 
 // eslint-disable-next-line no-unused-vars
 const debug = require('debug')('nosh:app');
@@ -82,7 +83,15 @@ if (app.get('env') === 'production') {
 app.set('view engine', 'hbs');
 
 app.use(logger('dev'));
+app.use(generateNone);
 app.use(helmet());
+app.use(
+    helmet.contentSecurityPolicy({
+        directives: {
+            'script-src': [`'self'`, getNonce],
+        },
+    })
+);
 app.use(compression());
 app.use(cors());
 app.use(express.json());
@@ -185,5 +194,16 @@ app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render('error');
 });
+
+function generateNone(req, res, next) {
+    // This is for inline-scripts.
+    const rhyphen = /-/g;
+    res.locals.nonce = uuid.v4().replace(rhyphen, ``);
+    next();
+}
+
+function getNonce(req, res) {
+    return `'nonce-${res.locals.nonce}'`;
+}
 
 module.exports = app;
