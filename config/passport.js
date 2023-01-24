@@ -4,14 +4,14 @@
  */
 
 const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
+const LocalStrategy = require('passport-local');
 const db = require('../models');
 
 passport.use(
     'local',
     new LocalStrategy(
         { usernameField: 'email', passReqToCallback: true },
-        (req, email, password, done) => {
+        function verify(req, email, password, done) {
             db.User.scope('forLogin')
                 .findOne({ where: { email: email } })
                 .then((user) => {
@@ -43,7 +43,7 @@ passport.use(
     'register',
     new LocalStrategy(
         { usernameField: 'email', passReqToCallback: true },
-        (req, email, password, done) => {
+        function register(req, email, password, done) {
             db.User.findOrCreate({
                 where: { email: req.body.email.toLowerCase() },
                 defaults: {
@@ -85,23 +85,27 @@ passport.use(
     )
 );
 
-passport.serializeUser((user, done) => {
-    done(null, user.id);
+passport.serializeUser(function (user, done) {
+    process.nextTick(function () {
+        done(null, user.id);
+    });
 });
 
-passport.deserializeUser((id, done) => {
-    db.User.scope('forDeserialize')
-        .findByPk(id)
-        .then((user) => {
-            if (user) {
-                done(null, user.get({ plain: true }));
-            } else {
-                done(null, false);
-            }
-        })
-        .catch((err) => {
-            done(err, false);
-        });
+passport.deserializeUser(function (id, done) {
+    process.nextTick(function () {
+        db.User.scope('forDeserialize')
+            .findByPk(id)
+            .then((user) => {
+                if (user) {
+                    done(null, user.get({ plain: true }));
+                } else {
+                    done(null, false);
+                }
+            })
+            .catch((err) => {
+                done(err, false);
+            });
+    });
 });
 
 module.exports = passport;

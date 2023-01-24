@@ -172,9 +172,11 @@ typings/
 
 # dotenv environment variables file
 .env
+.env.development
 
 # next.js build output
 .next
 
 *.map
 session.sqlite
+public/assets/css/style.css
