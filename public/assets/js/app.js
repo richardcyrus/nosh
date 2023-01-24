@@ -134,8 +134,7 @@
             buttons: {
                 close: {
                     /* eslint-disable max-len */
-                    label:
-                        '<span class="fas fa-times"></span>&nbsp;&nbsp;Close',
+                    label: '<span class="fas fa-times"></span>&nbsp;&nbsp;Close',
                     /* eslint-enable max-len */
                     className: 'btn-outline-danger',
                     callback: function () {
